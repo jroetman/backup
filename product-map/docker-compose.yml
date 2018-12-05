@@ -1,0 +1,52 @@
+version: '3.2'
+services:
+# elasticsearch:
+#    image:  docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+#    environment:
+#      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+#      - discovery.type=single-node
+#    ports:
+#      - 9200:9200
+#      - 9300:9300
+#    volumes:
+#      - esdata:/usr/share/elasticsearch/data
+#
+# kibana:
+#   image: docker.elastic.co/kibana/kibana:6.3.0
+#   ports:
+#     - "5601:5601"
+#   depends_on:
+#     - elasticsearch
+#
+  productmap:
+     container_name: productmap
+     build: ./product-map
+     ports:
+       - "4200:4200"
+     volumes:
+     - ./product-map/:/usr/src/app
+     - /usr/src/app/node_modules
+  netcdf:
+     container_name: netcdf
+     build: ./netcdf
+     ports:
+       - "5000:5000"
+     volumes:
+       - plots:/users/roetman/plots
+       - ./netcdf:/scripts
+       - /DATA/roetman:/DATA
+   
+
+# postgis:
+#   image: mdillon/postgis
+#   environment:
+#      - POSTGRES_PASSWORD=pass
+#   ports:
+#     - "5432:5432"
+
+volumes:
+   esdata:
+    driver: local
+   plots:
+   DATA:
+

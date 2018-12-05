@@ -1,0 +1,11 @@
+#mapContainer {
+  background: #013;
+}
+#vectorProduct {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  background: rgb(20,20,20,0.5);
+  width:100%;
+  z-index: 10000;
+}

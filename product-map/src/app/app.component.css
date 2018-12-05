@@ -1,0 +1,80 @@
+body{
+  background: #222;
+}
+
+.main {
+  display:flex;
+  flex-flow: row;
+  justify-content: space-between;
+  height:100vh;
+}
+
+.leftContent{
+    display: flex;
+    min-width:320px;
+    max-width:320px;
+    background: #222;
+    flex-direction:column;
+}
+
+.rightContent{
+  flex-grow: 2;
+}
+
+#sidebar{
+}
+
+#gallery {
+  border-radius: 4px;
+  background:#222;
+}
+
+#timeline {
+  width:100%;
+}
+
+#map{
+}
+
+#regions {
+  padding:1px;
+}
+
+#products {
+ width:100%;
+ height:100%;
+}
+
+h4{display: flex;
+   border: 1px solid #444;
+   margin:1px;
+   padding:1px;
+}
+
+.navButton {
+  margin-left:250px;
+  border-radius: 4px;
+  padding:2px;
+  cursor: default;
+  text-decoration: underline;
+}
+.navButton:hover{box-shadow: 0px 0px 5px;}
+
+.btn {
+    background:rgba(50,50,50,0.6);
+    color:#ccc;
+    border:1px solid #aaa;
+    border-radius:2px;
+
+}
+
+.instruction {
+ font-size:23px;
+ background:#ccc; 
+ border:2px solid white;
+ text-align:left;
+ padding:2px;margin:2px;
+ color:black;
+
+}
+

@@ -1,0 +1,39 @@
+/* You can add global styles to this file, and also import other style files */
+body {
+  background:#111;
+  color:#ccc;
+  font-family: "Segoe UI",Arial,sans-serif;
+
+}
+
+.btn {
+    background:rgba(50,50,50,0.6);
+    color:#ccc;
+    border:1px solid #aaa;
+    border-radius:2px;
+
+}
+
+.navlink {
+  background:none;
+  text-decoration:underline;
+  color:#0066ee;
+  cursor: default;
+  border:none;
+
+}
+
+.remove {
+   cursor:pointer;
+   color: red;
+   border-radius:5px;
+   width:15px;
+   text-align:center;
+
+   &:hover { 
+        box-shadow: 0px 0px 2px 1px red;
+        color:white;
+        background:rgba(255,0,0,0.4);
+
+   }
+}

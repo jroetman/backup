@@ -1,0 +1,4 @@
+id|name|alias|fieldtype|isDaily|path|foot|timeFormat|timeRegex
+1|ARP_JAXA_ptree|ARP_JAXA|obs|True|/shared/aerosol_sat/geo/l3/ahi/ARP_JAXA_ptree/030/dtg/daily|NOT OFFICIAL FNMON RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*
+2|NAVGEM_05|NAVGEM|aod|False|/DATA/cylc/products/NAVGEM_05/dtg/|NOT OFFICIAL FNMOC RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*
+3|ENAAPS|ENAAPS|aod|False|/DATA/cylc/products/ENAAPS/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*

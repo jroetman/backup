@@ -1,0 +1,26 @@
+<div class="option">
+    <h4 class="title"> 
+         {{map.name}}
+         <div class="remove" (click)="removeProduct(map.name)"> X </div>
+    </h4>
+    <div class="layers" >
+        <div (click)="showLayers=!showLayers" class="layertitle">
+              <h5> LAYERS </h5>
+              <div class="" *ngIf="showLayers"> &#x25B2; </div>
+              <div class="" *ngIf="!showLayers"> &#x25BC; </div>
+        </div> 
+        
+        <div [class.hideLayers]="showLayers">
+            <div> 
+                <div *ngFor="let l of map.layers">
+                    <app-layer [parent_guid]="map.name" [layer]="l"> </app-layer>
+                </div>
+            </div>
+            <div class="dropZone">
+                <div class="target" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addLayer($event)" [class.over]='over'>
+                   <p>Drag Field Here To Add Layer</p>
+                </div>
+            </div>
+       </div>
+    </div>
+<div>

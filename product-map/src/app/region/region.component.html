@@ -1,0 +1,8 @@
+<label class="head" (click)="showRegions = !showRegions" >
+    <button class=''> Predefined Regions</button>
+    <div *ngIf="!showRegions" class="arrow">&#x25B3; </div>
+    <div *ngIf="showRegions" class="arrow">&#x25BD; </div>
+</label>
+<div *ngIf="showRegions" class="regions"> 
+    <div *ngFor="let r of regions" class="region" [ngClass]="{'selectedRegion' : selectedRegion.name == r.name}" (click)="zoomToRegion(r)" (mouseenter)="highlightRegion(r)" (mouseleave)="highlightRegion()"> {{r.name}} </div>
+</div>

@@ -1,0 +1,12 @@
+<div>
+<div class="timeControls">
+  DTG: <input (change)="updateDate($event)" type="date" value="{{currentDtg.format('YYYY-MM-DD')}}">
+  Tau: {{this.currentTau}}
+  <button (click)="prevTau()"> Previous Tau </button>
+  <button [ngClass]="{'playing': isPlaying, 'stopped': !isPlaying}" (click)="togglePlay()"> {{isPlaying ? "Stop" : "Play" }}</button>
+  <button (click)="nextTau()"> Next Tau</button>
+  <button class="print" (click)="print()">Print</button>
+
+</div>
+<div (window:resize)="updateTimeline()" id="timelineContainer"> </div>
+</div>

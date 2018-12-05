@@ -1,0 +1,10 @@
+<div>
+    <span  class="vectorProduct" *ngFor="let p of selectedProducts; let i = index" >
+       <input type="checkbox" value="{{i}}" [checked]="p.showLayer" (change)="selectVectorProduct(i)"/> {{p.name}}
+       <div *ngIf="p.options">
+           <span  class="option" *ngFor="let o of p.options;let j = index;" >
+               <input type="checkbox" value="{{j}}" [checked]="p.selectedOptions.indexOf(o) >= 0" (change)="selectOption(i,o)"/> {{o}}
+           </span>
+       </div>
+    </span>
+</div>

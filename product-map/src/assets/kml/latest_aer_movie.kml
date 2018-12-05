@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8"?> <kml xmlns="http://earth.google.com/kml/2.1">
+<Document><name>MOVIE - NAAPS AOD 2018071300 </name>
+<open>1</open>
+<description>
+<![CDATA[
+<b>Movie of NAAPS AOD (NRL)</b><br>
+over Blue Marble image (NASA)
+ ]]>
+</description>
+<LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+  <range>10148000</range>
+</LookAt>
+
+<Folder>
+ <name>NAAPS Movie</name>
+<open>1</open>
+<GroundOverlay>
+   <name>2018071300</name>
+<TimeSpan>
+<begin>2018-07-13T00:00:00Z</begin>
+<end>2018-07-13T06:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071300.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071306</name>
+<TimeSpan>
+<begin>2018-07-13T06:00:00Z</begin>
+<end>2018-07-13T12:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071306.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071312</name>
+<TimeSpan>
+<begin>2018-07-13T12:00:00Z</begin>
+<end>2018-07-13T18:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071312.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071318</name>
+<TimeSpan>
+<begin>2018-07-13T18:00:00Z</begin>
+<end>2018-07-14T00:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071318.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071400</name>
+<TimeSpan>
+<begin>2018-07-14T00:00:00Z</begin>
+<end>2018-07-14T06:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071400.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071406</name>
+<TimeSpan>
+<begin>2018-07-14T06:00:00Z</begin>
+<end>2018-07-14T12:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071406.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071412</name>
+<TimeSpan>
+<begin>2018-07-14T12:00:00Z</begin>
+<end>2018-07-14T18:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071412.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071418</name>
+<TimeSpan>
+<begin>2018-07-14T18:00:00Z</begin>
+<end>2018-07-15T00:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071418.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071500</name>
+<TimeSpan>
+<begin>2018-07-15T00:00:00Z</begin>
+<end>2018-07-15T06:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071500.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071506</name>
+<TimeSpan>
+<begin>2018-07-15T06:00:00Z</begin>
+<end>2018-07-15T12:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071506.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071512</name>
+<TimeSpan>
+<begin>2018-07-15T12:00:00Z</begin>
+<end>2018-07-15T18:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071512.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071518</name>
+<TimeSpan>
+<begin>2018-07-15T18:00:00Z</begin>
+<end>2018-07-16T00:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071518.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071600</name>
+<TimeSpan>
+<begin>2018-07-16T00:00:00Z</begin>
+<end>2018-07-16T06:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071600.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071606</name>
+<TimeSpan>
+<begin>2018-07-16T06:00:00Z</begin>
+<end>2018-07-16T12:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071606.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071612</name>
+<TimeSpan>
+<begin>2018-07-16T12:00:00Z</begin>
+<end>2018-07-16T18:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071612.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071618</name>
+<TimeSpan>
+<begin>2018-07-16T18:00:00Z</begin>
+<end>2018-07-17T00:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071618.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071700</name>
+<TimeSpan>
+<begin>2018-07-17T00:00:00Z</begin>
+<end>2018-07-17T06:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071700.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071706</name>
+<TimeSpan>
+<begin>2018-07-17T06:00:00Z</begin>
+<end>2018-07-17T12:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071706.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071712</name>
+<TimeSpan>
+<begin>2018-07-17T12:00:00Z</begin>
+<end>2018-07-17T18:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071712.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071718</name>
+<TimeSpan>
+<begin>2018-07-17T18:00:00Z</begin>
+<end>2018-07-18T00:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071718.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071800</name>
+<TimeSpan>
+<begin>2018-07-18T00:00:00Z</begin>
+<end>2018-07-18T06:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071800.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+<GroundOverlay>
+   <name>2018071806</name>
+<TimeSpan>
+<begin>2018-07-18T06:00:00Z</begin>
+<end>2018-07-18T12:00:00Z</end>
+</TimeSpan>
+  <LookAt>
+  <longitude>45.702</longitude>
+  <latitude>22.196</latitude>
+    <range>10148000</range>
+  </LookAt>
+  <Icon>
+     <href>http://www.nrlmry.navy.mil/aerosol/globaer/ops_01/movie_images/201807/aod_bm_2018071806.png</href>
+  </Icon>
+  <LatLonBox>
+     <north>90</north>
+     <south>-90.0</south>
+     <east>180.0</east>
+     <west>-180.0</west>
+  </LatLonBox>
+</GroundOverlay>
+
+</Folder>
+
+<ScreenOverlay id="NRL Aerosol label">
+<name>NRL Aerosol Label</name>
+<visibility>1</visibility>
+<Icon>
+<href>http://www.nrlmry.navy.mil/aerosol/kml/legends/naaps_aod2.bmp</href>
+</Icon>
+<overlayXY x=".003" y=".13" xunits="fraction" yunits="fraction"/>
+<screenXY x=".003" y=".13" xunits="fraction" yunits="fraction"/>
+<rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
+<size x="0" y="0" xunits="pixels" yunits="pixels"/>
+</ScreenOverlay>
+
+</Document>
+</kml>

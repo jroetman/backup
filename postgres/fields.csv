@@ -1,0 +1,15 @@
+id|varname|alias|model_id
+1|total_aod|Total AOD|3
+2|sulfate_aod|Sulfate|3
+3|smoke_aod|Smoke|3
+4|seasalt_aod|Seasalt|3
+5|dust_aod|Dust|3
+6|frz_ht_zeroDegc_isoterm|frz_ht|2
+7|abs_vort_isobaric|Abs Vort|2
+8|air_temp_isobaric|Air Temp|2
+9|dwpt_dprs_isobaric|Dwpt Dprs|2
+10|geop_ht_isobaric|Geop Ht|2
+11|rltv_hum_isobaric|Rltv Hum|2
+12|wnd_vert_vel|Wnd Vert Vel|2
+13|sky_cvr|Sky Cvr|2
+14|ttl_prcp_surface_6_Hour_Accumulation|Total Prcp 6 Hour|2

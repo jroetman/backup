@@ -1,0 +1,37 @@
+<div id="gallery">
+     <div *ngIf="!showOptions" class="toggleMin" (click)="showOptions = !showOptions">
+         <div class="option"> Maps </div>
+
+     </div>
+     <div id="options" *ngIf="showOptions">
+          <label> Maps </label>
+          <div *ngIf="showOptions" class="toggleBtn" (click)="showOptions = !showOptions">
+              <span>&#x25C1;</span>
+          </div>
+          <div  *ngFor="let sp of selectedProducts; let i = index; trackBy: trackByFn" class="options" >
+                 <app-options [idx]="i + 1" [map]="sp"> </app-options>
+          </div>
+    
+          <div class="dropZone" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addProduct($event)" [class.over]='over'>
+             <div>Drag Field Here</div>
+             <div>OR</div>
+             <button class="btn" (click)="createMap()">Create New Map </button>
+          </div>
+
+     </div>
+     <div class="images">
+        <!--div [ngClass]="{'halfWidth' : products.length > 1}" *ngFor="let p of products"-->
+        <div class="galleryOptions">
+           Images Per Row <input type="number" max="4" min="1" onkeydown="return false" size=7 [(ngModel)]="imgPerRow" /> 
+        </div>
+
+        <h3 *ngIf="selectedProducts && selectedProducts.length == 0"> No Products Selected</h3>
+        <div [ngStyle]="{'width' : getWidth()}" class="imgcontainer" *ngFor="let p of selectedProducts; let i = index; trackBy: trackByFn"> 
+            <div class="head"> 
+              <div><b>{{p.name}}</b> <!-- {{p.name + " " + p.field.alias + " " + p.options.level}} --> </div>
+              <div class="remove" (click)="removeProduct(p)"> X </div>
+            </div>
+            <app-image [numImages]="selectedProducts.length" [tau]="currentTau" [dtg]="currentDtg" [product]="p" [extent]="extent"> </app-image>
+        </div>
+     </div>
+</div>

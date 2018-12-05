@@ -1,0 +1,99 @@
+version: '3.2'
+services:
+  elasticsearch:
+    image:  docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+    environment:
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:6.3.0
+    ports:
+      - "5601:5601"
+    depends_on:
+     - elasticsearch
+
+#  nginx:
+#    container_name: nginx
+#    volumes:
+#     - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+#    image: nginx
+#    ports:
+#      - "8080:8080"
+  pgadmin:
+    image: thajeztah/pgadmin4
+    ports:
+       - "5050:5050"
+    volumes:
+       - ./pgadmin:/pgadmin
+       - ./postgres/:/postgres
+  db:
+    image: postgres
+    volumes:
+     - ./postgres/:/scripts
+
+  productmap:
+     container_name: productmap
+     build: ./product-map
+     ports:
+       - "4200:4200"
+     volumes:
+     - ./product-map/:/usr/src/app
+     - /usr/src/app/node_modules
+
+  productlist:
+     container_name: productlist
+     build: ./product-list
+     #command: python3 manage.py runserver 0.0.0.0:8000
+     ports:
+       - "8000:8000"
+     volumes:
+     - ./product-list/:/code
+
+  netcdf:
+     container_name: netcdf
+     build: ./netcdf
+     ports:
+       - "5000:5000"
+     volumes:
+       - plots:/users/roetman/plots
+       - ./netcdf:/scripts
+       - /DATA/roetman:/DATA
+       - /shared:/shared
+
+#  locust:
+#     build: ./locust
+#     ports:
+#       - "8089:8089"
+   
+#  awips:
+#     container_name: awips
+#     image: occdata/awips2-cave:17.1.1
+
+#  awipsedx:
+#     container_name: awipsedx
+#     build: ./edx
+#     hostname: docker.nrlmry.navy.mil
+#     ports:
+#       - "9581:9581"
+#       - "9582:9582"
+   
+
+# postgis:
+#   image: mdillon/postgis
+#   environment:
+#      - POSTGRES_PASSWORD=pass
+#   ports:
+#     - "5432:5432"
+
+volumes:
+   esdata:
+    driver: local
+   plots:
+   DATA:
+

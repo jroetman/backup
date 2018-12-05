@@ -1,0 +1,100 @@
+#timelineContainer {
+   width:100%;
+   background:linear-gradient(#111, #444, #111);
+   z-index: 1000;
+   bottom:150px;
+   border:1px solid #333;
+   overflow:auto;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: white;
+  shape-rendering: crispEdges;
+}
+
+.tick line {stroke:#555;}
+.y.axis.tick line{stroke: none;}
+
+.axis text {
+  stroke-width:0px;
+  fill:white;
+}
+
+.y.axis path{
+  stroke:none;
+}
+.y.axis text{
+  stroke-width:0px;
+  fill:#ccc;
+  padding:5px;
+  font-size:12px;
+  word-wrap: normal;
+}
+
+.tauCircle {
+  stroke-width: 1px;
+  stroke:black;
+
+}
+
+.slider {
+    &:hover {
+         fill:#555;
+         stroke:#bbc;
+
+         line {stroke-width:5px;stroke:#8bd;opacity:0.7}
+         .handle {fill:#555;stroke:white;}
+    }
+
+    line {
+    fill: none;
+    stroke: white;
+    stroke-width: 12px;
+  	opacity: 0.5;
+  	padding-top: 10px;
+    shape-rendering: crispEdges;
+   }
+
+   .handle{
+      stroke-width:1px;
+  	  opacity: 0.8;
+      stroke:#ddd;
+      fill:#333;
+
+    }
+}
+
+.timeControls {
+     display:flex;
+     justify-content:center;
+     background:rgba(50,50,50,0.5);
+   
+
+     button {
+         background:rgba(50,50,50,0.6);
+         color:#ccc;
+         border:1px solid #aaa;
+         border-radius:2px;
+         margin:2px;
+         &.stopped {background:green;}
+         &.playing {background:red;}
+         &:hover {color:white;box-shadow:0px 0px 5px;}
+     }
+
+ }
+
+.removeBtn{
+    cursor:default;
+    font-size: 13px; 
+
+    &:hover {
+      stroke:white;
+      stoke-width:1;
+     }
+}
+
+.print {
+  position:absolute;
+  right:0px;
+}

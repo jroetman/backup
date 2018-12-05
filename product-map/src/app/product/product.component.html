@@ -1,0 +1,43 @@
+<div class="view"> View By: 
+    <button [ngClass]="{'selected' : searchView == 'product'}" (click)="selectView('product')"> Product </button>
+    <button [ngClass]="{'selected' : searchView == 'species'}" (click)="selectView('species')"> Species </button>
+</div>
+<app-searchbar id="searchbar"> </app-searchbar>
+<h5 class="fieldlabel" [class.highlight]="showInstructions"> Fields </h5>
+<div class="products">
+    <ul *ngIf="searchView == 'product'"> 
+      <!--li>{{extent | precision:2}}</li -->
+      <li class="region" *ngFor="let rt of regionTree; let i = index">
+        <h4 class="">
+           {{rt.name}}
+        </h4>
+        <ul>
+        <li *ngFor="let p of rt.entities | keys; ">
+            <!-- div (click)="selectProducts(i, p)" class="productLink">
+              <label class="navlink" >{{p}}</label>
+              <div *ngIf="!showProducts[i + p]" class="arrow">&#x25B3; </div>
+              <div *ngIf="showProducts[i + p]" class="arrow">&#x25BD; </div>
+            </div -->
+            <div *ngIf="showProducts[i + p]" id="sidebar">
+                <app-sidebar  [products]=rt.entities[p].products> </app-sidebar>
+            </div>
+        </li>
+        </ul>
+      </li>
+    </ul>
+    <ul *ngIf="searchView == 'species'"> 
+      <!--li>{{extent | precision:2}}</li -->
+      <li class="region" *ngFor="let spec of regionTree; let i = index">
+        <div (click)="selectProducts(spec.name, '')" class="productLink">
+          <h4>{{spec.name}}</h4>
+          <div *ngIf="!showProducts[spec.name]" class="arrow">&#x25B3; </div>
+          <div *ngIf="showProducts[spec.name]" class="arrow">&#x25BD; </div>
+        </div>
+        <ul>
+        <div *ngIf="showProducts[spec.name]" id="sidebar">
+            <app-sidebar  [products]=spec> </app-sidebar>
+        </div>
+        </ul>
+      </li>
+    </ul>
+</div>

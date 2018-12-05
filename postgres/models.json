@@ -1,0 +1,434 @@
+[
+    {
+        "ARP_JAXA_ptree": {
+            "field": "obs",
+            "fieldType": "discover",
+            "fields": "discover",
+            "isDaily": "True",
+            "path": "/shared/aerosol_sat/geo/l3/ahi/ARP_JAXA_ptree/030/dtg/daily",
+            "timeFormat": "%Y%m%d_%H%M"
+        }
+    },
+    {
+        "NAVGEM_05": {
+            "color": "black",
+            "dir": "NAVGEM_05",
+            "fcst_finc": 12,
+            "fhr": 120,
+            "fieldType": "discover",
+            "fields": "discover",
+            "finc": 6,
+            "foot": "NOT OFFICIAL FNMOC RUN",
+            "label": "NAVGEM",
+            "numberlabel": " 1 ",
+            "nx": 360,
+            "ny": 180,
+            "path": "/DATA/cylc/products/NAVGEM_05/dtg/",
+            "prefix": ""
+        }
+    },
+    {
+        "FNMOC": {
+            "color": "black",
+            "dir": "NVA_35",
+            "fcst_finc": 12,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 6,
+            "foot": "FNMOC RUN",
+            "label": "NAAPS_NAVGEM35",
+            "numberlabel": " 17 ",
+            "nx": 1080,
+            "ny": 540,
+            "prefix": "",
+            "specs": [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ],
+            "web": "fnmoc_01"
+        }
+    },
+    {
+        "ENAAPS": {
+            "color": "red",
+            "dir": "ENAAPS",
+            "field": "aod",
+            "foot": "NOT OFFICIAL FNMOC NAAPS RUN",
+            "label": "ENAAPS",
+            "legend": "NAAPS Ens",
+            "path": "/DATA/cylc/products/ENAAPS/dtg/",
+            "prefix": "DART Ensemble ",
+            "specs": [
+                "total_aod",
+                "sulfate_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "dust_aod"
+            ],
+            "web": "ens_01"
+        }
+    },
+    {
+        "NAAPS_KORUS": {
+            "color": "black",
+            "dir": "NVA_41",
+            "fcst_finc": 12,
+            "fhr": 96,
+            "finc": 3,
+            "foot": "NRL RUN for KORUS",
+            "label": "NAAPS_KORUS",
+            "numberlabel": " 15 ",
+            "nx": 1080,
+            "ny": 540,
+            "prefix": "",
+            "specs": [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ],
+            "web": "korus_01"
+        }
+    },
+    {
+        "NAAPS_KORUS3D": {
+            "color": "black",
+            "dir": "NVA_41",
+            "fcst_finc": 12,
+            "fhr": 96,
+            "field": "aod",
+            "finc": 3,
+            "foot": "NRL 3Dvar RUN for KORUS",
+            "label": "NAAPS_KORUS3D",
+            "numberlabel": " 16 ",
+            "nx": 1080,
+            "ny": 540,
+            "prefix": "",
+            "specs": [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ],
+            "web": "korus_02"
+        }
+    },
+    {
+        "GEOS5": {
+            "color": "magenta",
+            "dir": "GEOS5",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 1,
+            "foot": "GEOS-5 model output produced by NASA Global Modeling and Assimilation Office",
+            "label": "GEOS-5",
+            "numberlabel": " 2 ",
+            "path": "/DATA/cylc/products/GEOS5/dtg/",
+            "prefix": "",
+            "specn": {
+                "blackcarbon_aod": "bcexttau",
+                "dust_aod": "duexttau",
+                "organiccarbon_aod": "ocexttau",
+                "seasalt_aod": "ssexttau",
+                "sulfate_aod": "suexttau"
+            },
+            "specs": [
+                "dust_aod",
+                "seasalt_aod",
+                "BlackCarbon_AOD",
+                "sulfate_aod",
+                "OrganicCarbon_AOD",
+                "smoke_aod",
+                "total_aod"
+            ],
+            "web": "geos5_01"
+        }
+    },
+    {
+        "CAMS": {
+            "color": "orange",
+            "dir": "CAMS",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 3,
+            "foot": "",
+            "label": "CAMS",
+            "numberlabel": " 30 ",
+            "path": "/DATA/cylc/products/CAMS/dtg/",
+            "prefix": "",
+            "specn": {
+                "biomassburning_aod": "bbaod550",
+                "blackcarbon_aod": "bcaod550",
+                "dust_aod": "duaod550",
+                "organicmatter_aod": "omaod550",
+                "seasalt_aod": "ssaod550",
+                "sulfate_aod": "suaod550",
+                "total_aod": "aod550"
+            },
+            "specs": [
+                "BiomassBurning_AOD",
+                "BlackCarbon_AOD",
+                "OrganicMatter_AOD",
+                "seasalt_aod",
+                "sulfate_aod",
+                "dust_aod",
+                "total_aod",
+                "smoke_aod"
+            ],
+            "timeIsTimestamp": "True",
+            "web": "cams_01"
+        }
+    },
+    {
+        "MOCAGE": {
+            "color": "orange",
+            "dir": "MOCAGE",
+            "fcst_finc": 24,
+            "fhr": 96,
+            "field": "aod",
+            "finc": 6,
+            "foot": "",
+            "label": "MOCAGE",
+            "numberlabel": " 8 ",
+            "path": "/DATA/cylc/products/MOCAGE/dtg/",
+            "prefix": "",
+            "specn": {
+                "AOD": "AOD",
+                "AOD_AMMONI": "AOD_AMMONI",
+                "AOD_AnthFinePart": "AOD_AnthFinePart",
+                "AOD_BLACKC": "AOD_BLACKC",
+                "AOD_DESDUS": "AOD_DESDUS",
+                "AOD_DYNSAL": "AOD_DYNSAL",
+                "AOD_NITRAT": "AOD_NITRAT",
+                "AOD_ORGANC": "AOD_ORGANC",
+                "AOD_SULFAT": "AOD_SULFAT",
+                "AOD_smoke": "AOD_smoke"
+            },
+            "specs": [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ],
+            "web": "mocage_01"
+        }
+    },
+    {
+        "SILAM_SFC": {
+            "color": "orange",
+            "dir": "SILAM",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "sfc",
+            "finc": 6,
+            "foot": "",
+            "hasHybrid": "True",
+            "label": "SILAM",
+            "numberlabel": " 9 ",
+            "path": "/DATA/cylc/products/SILAM_SFC/dtg/",
+            "prefix": "",
+            "specn": {
+                "dust_sfc": "cnc_dust",
+                "pm10": "cnc_PM10",
+                "pm2.5": "cnc_PM2_5",
+                "seasalt_sfc": "cnc_sslt"
+            },
+            "specs": [
+                "Seasalt_SFC",
+                "Dust_SFC",
+                "PM10",
+                "PM2.5"
+            ],
+            "web": "silam_01"
+        }
+    },
+    {
+        "SILAM_AOD": {
+            "color": "orange",
+            "dir": "SILAM",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 6,
+            "foot": "",
+            "label": "SILAM",
+            "numberlabel": "9",
+            "path": "/DATA/cylc/products/SILAM_AOD/dtg/",
+            "prefix": "",
+            "specn": {
+                "dust_aod": "ocd_dust_w550",
+                "seasalt_aod": "ocd_sslt_w550",
+                "smoke_aod": "ocd_frp_w550",
+                "sulfate_aod": "ocd_abf_w550",
+                "total_aod": "ocd_part_w550"
+            },
+            "specs": [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ],
+            "web": "silam_01"
+        }
+    },
+    {
+        "MASINGAR": {
+            "color": "green",
+            "dir": "MASINGAR",
+            "field": "aod",
+            "finc": 6,
+            "foot": "",
+            "label": "MASINGAR",
+            "numberlabel": " 4 ",
+            "path": "/DATA/cylc/products/MASINGAR/dtg/",
+            "prefix": "",
+            "specn": {
+                "dust_aod": "dust",
+                "seasalt_aod": "seasalt",
+                "smoke_aod": "smoke",
+                "sulfate_aod": "sulfate",
+                "total_aod": "total"
+            },
+            "specs": [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ],
+            "web": "masingar_01"
+        }
+    },
+    {
+        "NGAC": {
+            "color": "blue",
+            "dir": "NGAC",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 6,
+            "foot": "",
+            "label": "NGAC",
+            "numberlabel": " 5 ",
+            "path": "/DATA/cylc/products/NGAC/dtg/",
+            "prefix": "",
+            "specn": {
+                "dust_aod": "dust_aod"
+            },
+            "specs": [
+                "dust_aod"
+            ],
+            "web": "ngac_01"
+        }
+    },
+    {
+        "NGACF": {
+            "color": "blue",
+            "dir": "NGACF",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 3,
+            "foot": "",
+            "label": "NGAC",
+            "numberlabel": " 50 ",
+            "path": "/DATA/cylc/products/NGACF/dtg/",
+            "prefix": "",
+            "specn": {
+                "BlackCarbon_AOD": "BlackCarbon_AOD",
+                "OrganicCarbon_AOD": "OrganicCarbon_AOD",
+                "dust_aod": "dust_aod",
+                "seasalt_aod": "seasalt_aod",
+                "sulfate_aod": "sulfate_aod",
+                "total_aod": "total_aod"
+            },
+            "specs": [
+                "dust_aod",
+                "seasalt_aod",
+                "BlackCarbon_AOD",
+                "sulfate_aod",
+                "OrganicCarbon_AOD",
+                "smoke_aod",
+                "total_aod"
+            ],
+            "web": "ngac_02"
+        }
+    },
+    {
+        "UKMO": {
+            "color": "pink",
+            "dir": "UKMO",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 3,
+            "foot": "",
+            "label": "UKMO",
+            "numberlabel": " 7 ",
+            "path": "/DATA/cylc/products/UKMO/dtg/",
+            "prefix": "",
+            "specn": {
+                "dust_aod": "atmosphere_optical_thickness_due_to_dust_dry_aerosol"
+            },
+            "specs": [
+                "dust_aod"
+            ],
+            "web": "ukmo_01"
+        }
+    },
+    {
+        "MONARCH": {
+            "color": "brown",
+            "dir": "MONARCH",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 6,
+            "foot": "",
+            "label": "MONARCH",
+            "numberlabel": " 16 ",
+            "path": "/DATA/cylc/products/MONARCH/dtg/",
+            "prefix": "",
+            "specn": [
+                "dust_aod550",
+                "salt_aod550"
+            ],
+            "specs": [
+                "dust_aod",
+                "seasalt_aod"
+            ],
+            "web": "monarch_01"
+        }
+    },
+    {
+        "NMMB-MONARCH": {
+            "color": "brown",
+            "dir": "MONARCH",
+            "fcst_finc": 24,
+            "fhr": 120,
+            "field": "aod",
+            "finc": 6,
+            "foot": "",
+            "label": "MONARCHF",
+            "numberlabel": " 16 ",
+            "path": "/DATA/cylc/products/NMMB-MONARCH/dtg/",
+            "prefix": "",
+            "specs" : [
+                "sulfate_aod",
+                "dust_aod",
+                "smoke_aod",
+                "seasalt_aod",
+                "total_aod"
+            ]
+        }
+    }
+]

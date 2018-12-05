@@ -1,0 +1,45 @@
+id|ht_sfc|height above earth/sea surface
+1|1|surface|surface of earth/sea
+2|4|isth_lvl|isothermal level
+3|6|ht_sfc|height above earth/sea surface
+4|6|max_wnd_lvl|
+5|7|trpp_lvl|tropopause level (top of troposphere)
+6|8|atms_top|top of atmosphere
+7|9|ocn_bot|ocean bottom
+8|100|isbr_lvl|isobaric level (constant pres)
+9|101|isbr_lay|layer between 2 isobaric levels
+10|102|msl|mean sea level
+11|105|ht_sfc|height above earth/sea surface
+12|107|sgma_lvl|sigma level
+13|113|isnt_lvl|isentropic level (constant temp)
+14|115|ht_msl|height above mean sea level
+15|160|dpth_sfc|depth below sea surface
+16|160|mix_lay|mixed layer (in ocean; shallow, isothermal)
+17|160|ocn_lay|layer between 2 depths in ocean
+18|200|atms_lay|layer between 2 heights in atmosphere
+19|200|flt_lvl_dom|flight level domain
+20|200|isbr_lvl_dom|Isobaric level domain
+21|200|sky_cvr|full depth of atmospheres
+22|201|dpth_sfc_dom|Depth levels domain
+23|201|ocn|ocean (generic)
+24|202|blw_snd_lay|below sound layer (100 ft immediately below)
+25|203|shlw_snd_chan|shallow sound channel (layer in ocean)
+26|205|deep_snd_chan|deep sound channel
+27|206|snd_lay|
+28|212|low_cld|low cloud layer
+29|222|mid_cld|middle cloud layer
+30|232|hi_cld|high cloud layer
+31|235|deep_lay|between 100 and 1000mb
+32|236|fcst_per_dom|Forecast period domain
+33|237|freq_ix|frequency index
+34|238|ht_sfc_dom|height surface domain
+35|239|lay|
+36|240|snd_lay|sound layer (sonic layer in ocean)
+37|241|thcl_grad|temperature gradient of thermocline upper portion
+38|242|thcl_lvl|thermocline level
+39|243|trns_lay|transient layer (in ocean; shallow, afternoon)
+40|244|vert_xsct|vertical cross section
+41|250|flight_lvl|altitude below 18,000 ft in feet
+42|251|flight_lvl|altitude above 18,000 ft in hft/100
+43|252|flight_lvl|layer below 18,000 ft in hft
+44|253|flight_lvl|layer above 18,000 ft in hft/1000*

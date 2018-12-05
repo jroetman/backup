@@ -1,0 +1,33 @@
+div { padding:2px; }
+h3 {padding:1px;margin:1px;margin-top:3px;}
+h4 {padding:1px;margin:1px;margin-top:3px;margin-bottom:1px;}
+.fieldlabel {margin:0px;text-align:left;background:#111;padding:2px;}
+
+ul {
+  list-style: none;
+  margin:0px;
+  padding:2px;
+  pading-top:0px;
+  font-size:14px;
+}
+
+li {
+  text-align: left;
+  font-size:14px;
+}
+
+.productLink {display: flex;justify-content: space-between;}
+.productLink:hover{ border-left: 2px solid #555;}
+.arrow {cursor:default}
+
+.products .region{border-bottom: 1px solid #333; }
+.products h4 {cursor: default; }
+.products h4:hover {color: #cca; }
+.products {border:1px solid #777;
+           border-right:#222;
+           overflow-y:auto; height:100%;}
+
+.view button {background:none; text-decoration:underline; border:none;color:#ccc;}
+.view { text-align:left;border-top:1px solid #ccc;}
+
+.view .selected {color:#0055ee; box-shadow: 0px 0px 2px;}

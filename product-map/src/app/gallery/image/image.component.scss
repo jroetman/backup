@@ -1,0 +1,28 @@
+img {
+
+  width:100%;
+  background:white;
+}
+
+.loadplots {
+    margin-left:15px;
+    margin-top:10px;
+    border-radius:10px;
+    opacity: 0.5;
+    display:inline;
+    position:absolute;
+
+   .loader {
+        border: 15px solid #f3f3f3; /* Light grey */
+        border-top: 15px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+    }
+}
+    
+@keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+}

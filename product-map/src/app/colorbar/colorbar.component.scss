@@ -1,0 +1,173 @@
+#colorbar {
+    width:220px;
+    margin-left:0px;
+    margin-top:1px;
+    
+}
+
+.colordomain {
+    display: flex;
+    flex-direction:column;
+   .group {justify-content:space-between; display:flex;}
+
+    label {display:block;}
+    input[type="color" i] {height:18px; width:20px;}
+    
+   .nocolor {
+        opacity:0.1;
+        &:hover{
+           box-shadow:0px 0px 5px white ;
+           opacity:1;
+         }
+     }
+
+     .tcdiv { margin:0px;
+              padding:0px; 
+              margin-bottom:2px;
+              text-align:right; 
+             }
+}
+
+.colorEdit {
+     position:absolute;
+     float:left;
+     border-radius:5px;
+     border:2px solid #777;
+     margin-left:10px;
+     background:#222;
+     padding:5px;
+     z-index:1000;
+     min-width:300px;
+
+     .select { 
+           label {padding-right:10px;}
+           display:flex
+      }
+
+     .domains {
+       display:flex;
+       flex-direction:column;
+       margin-bottom:5px;
+       h4 {margin:1px;padding:1px;}
+
+       div {
+            margin-left:5px;
+            display:flex;
+            justify-content:flex-start;
+            flex-wrap:wrap;
+       } 
+       div input {width:70px; }
+     }
+
+}
+
+.pcolor{
+    input { width:25px;}
+}
+
+
+.addBtnEnd{
+   border:1px solid #454;;
+   border-radius:5px;
+   background:#252;
+   font-size: 15px;
+   color: #0E0;
+   &:hover{
+      border:1px solid white;
+      box-shadow:0px 0px 15px white;
+   }
+}
+
+.removeBtn {
+    margin-left:auto;
+    border:1px solid #544;;
+    border-radius:5px;
+    background:#522;
+    font-size: 15px;
+    color: red;
+    &:hover{
+       border:1px solid white;
+       box-shadow:0px 0px 15px white;
+    }
+}
+
+ 
+.addBtn {
+    position:relative;
+    float:left;
+    left: 15px;
+    border:2px solid #111;;
+    border-radius:5px;
+    background:#252;
+    font-size: 15px;
+    color: #0E0;
+    &:hover{
+       border:1px solid white;
+       box-shadow:0px 0px 15px white;
+    }
+}
+
+.editColors {
+   padding:2px;
+   border:1px solid #aaa;
+   margin:2px;
+   cursor:pointer;
+   background: #333;
+   font-size:15px;
+   color: white;
+   border-radius:2px;
+
+   &:hover { 
+       box-shadow: 0px 0px 5px white;
+       background:#222;
+       color:white;
+   
+   }
+
+}
+  
+.saveBar {
+   text-align:left;
+
+   .save { position:relative; float:right;}
+  .resetBarBtn {
+      background: #333;
+      color:#fff;
+      border: 2px solid #aaa;
+      box-shadow:0px 0px 2px white ;
+      &:hover{
+        box-shadow:0px 0px 10px #00a;
+      }
+      
+  }
+
+  .cancelBarBtn {
+      background: #333;
+      color:#fff;
+      border: 2px solid #700;
+      box-shadow:0px 0px 25px white ;
+      &:hover{
+        box-shadow:0px 0px 30px red;
+      }
+      
+  }
+  
+  .saveBarBtn {
+      background: #333;
+      color:#fff;
+      border: 2px solid #070;
+      box-shadow:0px 0px 25px white ;
+      &:hover{
+        box-shadow:0px 0px 30px green;
+      }
+      
+  }
+}
+
+.colorTable {
+  margin-top:5px;
+  tr { text-align:center}
+
+}
+a {color: #ccc;}
+

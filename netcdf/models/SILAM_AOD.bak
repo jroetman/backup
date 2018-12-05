@@ -1,0 +1,240 @@
+#!/software/depot/anaconda-3-5.1.0/bin/python
+import sys, os, time
+import libs.libtools as lt
+import libs.libmeta as lm
+import libs.libicap as li
+import ICAPDownloadUtils as utils
+from time import gmtime, strftime, strptime
+from datetime import datetime 
+from datetime import timedelta
+from netCDF4 import Dataset
+
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+from matplotlib.colors import LinearSegmentedColormap
+from cartopy.mpl.gridliner import LONGITUDE_FORMATTER, LATITUDE_FORMATTER
+import numpy as np
+
+
+dir_prod = lm.dir_prod 
+debug = 1 
+model = "SILAM"
+field  = "aod"
+mod_dict = lm.models()
+
+def run_main(dtg, actions, auto=False):
+    #_If no model specified, use this list
+        #   models = ['MACC','GEOS5','MASINGAR','NGAC','NMMB'] \
+        #models = ['NGAC','NMMB','MACC','MASINGAR','GEOS5'] \
+    #_Attempt Downloads
+    
+    if(actions['download'] == True):
+        download(model, dtg, auto)
+
+    print(actions)
+    if(actions['plot'] == True):
+        plot(model, dtg)
+
+    #_Look through status files for past week, check for failures
+    if auto: utils.backfill( dtg, download )
+
+def download(dtg, auto=False ):
+    '''
+    Given an ICAP model and dtg, attempts to download file
+    and put into the products directory.
+    
+    model   : str, should be from known list
+    dtg : str*10, either passed or from system time, squelched to 00z
+
+    The value of dtg WILL BE REASSIGNED for certain models.
+    '''
+
+    #_Get model metadata
+
+    #_Setup route output directory
+    dir_out = dir_prod + '/' + model + '/' + dtg[:6]
+    lt.mkdir_p( dir_out )
+
+    #_SILAM________________________________________________________________
+    urlbase = 'http://silam.fmi.fi/thredds/ncss/silam_glob_v5_5_1/runs/silam_glob_v5_5_1_RUN_'
+    urlvariable='?var=ocd_dust_w550,ocd_frp_w550,ocd_sslt_w550,ocd_part_w550,ocd_abf_w550&timeStride=6&accept=netcdf&time_start='
+    requestmark = "&email=peng.xian@nrlmry.navy.mil"
+ 
+    dtg1 =  lt.newdtg(dtg, 0)   #first available forecast is at 06Z                
+    startstr = strftime( "%Y-%m-%dT00:%M:%SZ", gmtime(lt.dtg2epoch(dtg)) )
+    startstr1 = strftime("%Y-%m-%dT01", gmtime(lt.dtg2epoch(dtg1)) )+":00:00Z"
+    dtgend = lt.newdtg(dtg, 114)
+    endstr = strftime("%Y-%m-%dT01", gmtime(lt.dtg2epoch(dtgend)) )+":00:00Z"
+    url = urlbase + startstr + urlvariable + startstr1 + "&time_end="+endstr + requestmark
+ 
+    file = dtg+'_aod_silam.nc'
+    #file_in  = 'silam_glob_v5_5_1_RUN_'+startstr+'.nc' 
+    file_out = dir_out + '/' + file
+    utils.dbg("fileout: " + file_out)
+ 
+    try:
+        utils.http_silam( url, file_out )
+
+    except:
+        utils.dbg(( 'failed to download', file_out ))
+       # if os.path.exists( file_out ):
+       #     os.unlink( file_out )
+        sys.exit(1)
+  
+  
+    #_Write Successful download results in form of status file
+    utils.statusfile( model, dtg, True )
+    #update hours
+    rootgrp = Dataset(file_out, "r+")
+    times = len(rootgrp.variables['time'])
+    newtimes = range(0, times * 6, 6 ) #6 is the stride
+    rootgrp.variables['time'][:] = newtimes
+    rootgrp.close()
+    sys.exit(0)
+
+def plot(model, dtg):
+    dir_prd = lm.dir_prod   #_ICAP Data Dir
+    dir_web = lm.dir_web    #_Webpage Dir
+    mod_dict = lm.models()
+    plt_dict = lm.fields()
+
+    
+    #_Var Table
+    fhr     = 24 * 4   #_Number of days to forecast
+    bhr     = 24 * 14  #_Number of analysis days for verif plots
+    finc    = 6        #_DT between plots
+    nproc   = 8        #_Number of processors to use
+    #dir_esc = '/ftp/receive/roetman/plots/'
+    dir_esc = '/DATA/roetman/cylc/products/plots/'
+    yearMonth = dtg[:6]
+    atime = datetime.strptime(dtg,"%Y%m%d%H")
+    
+    file = dir_prd + "/" + model + "/" + yearMonth + "/" + dtg + "_aod_silam.nc" 
+    
+    ncfile  = Dataset(file, "r+")
+    specs   = [ s.lower() for s in mod_dict[model]['specs'] ]
+    
+    variables = ncfile.variables
+    lats = variables["lat"][:] 
+    lons = variables["lon"][:] 
+    times = variables["time"][:]
+    
+    #proj = ccrs.NorthPolarStereo(central_longitude=0.0, globe=None)
+    proj = ccrs.PlateCarree()
+    
+    dpi = 96
+    specs = ['total_aod']
+    rgb     = lt.rgbgen( field, nens=0)
+    levs    = plt_dict[field]['levs']
+
+    print("ASDFAS")
+    print(rgb)
+    regions = lm.regions();
+
+    for k, v in regions.items():
+        if not os.path.isdir(dir_esc + "/" + k):
+            os.mkdir(dir_esc + "/" + k)
+
+        llatidx  =np.argmin(np.abs(lats - v['corn'][0])) 
+        ulatidx  =np.argmin(np.abs(lats - v['corn'][1]))
+        llonidx  =np.argmin(np.abs(lons - v['corn'][2])) 
+        ulonidx  =np.argmin(np.abs(lons - v['corn'][3])) 
+
+        for spec in specs: #handle.variables:
+            if spec == 'total_aod': spec_moc = 'ocd_part_w550'
+            elif spec == 'dust_aod': spec_moc = 'ocd_dust_w550'
+            elif spec == 'sulfate_aod': spec_moc = 'ocd_abf_w550'
+            elif spec == 'smoke_aod': spec_moc = 'ocd_frp_w550'
+            elif spec == 'seasalt_aod': spec_moc = 'ocd_sslt_w550'
+            else: continue
+        
+
+            for idx in range(0,len(times)):
+                tau = times[idx]; 
+                vals = variables[spec_moc][idx, llatidx:ulatidx, llonidx:ulonidx]
+                delta =  timedelta(hours=tau) 
+                print(tau)
+                print(delta)
+                vtime = atime + delta
+                # Create a figure
+
+                fig, ax = plt.subplots(figsize=(16,9),subplot_kw=dict(projection=proj))
+                ax.add_feature(cfeature.LAND)
+                ax.add_feature(cfeature.COASTLINE)
+                ax.add_feature(cfeature.BORDERS)
+                ax.set_extent([v['corn'][2], v['corn'][3], v['corn'][0], v['corn'][1]])
+
+                gl = ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True, linestyle='--')
+                gl.xlabels_top=False
+                gl.xformatter = LONGITUDE_FORMATTER
+                gl.yformatter = LATITUDE_FORMATTER
+
+                cs2 = ax.contourf(lons[llonidx:ulonidx], lats[llatidx:ulatidx], vals, 80, levels=levs,  transform=ccrs.PlateCarree(), colors=rgb)
+
+                fig.colorbar(cs2,fraction=0.046, pad=0.045, aspect=40, shrink=0.9, orientation='horizontal')
+
+                foot = getFoot(dtg, model)
+                plt.figtext( 0.16, 0.05, foot, size='x-small' )
+
+                f_title = plt_dict[field]['title']
+                head = getHead(atime, vtime, tau, model, spec, f_title)
+                plt.title(head, loc='left')
+
+                plt.savefig("%s/%s/%s_%s_f%s_%s_%s_%s.jpg" % \
+                 (dir_esc, k, datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(vtime, "%Y%m%d%H"), str(int(tau)).zfill(3), spec, '550', model.lower() ))
+                
+                plt.close()
+   
+           
+    
+    ncfile.close()
+
+def getFoot(cdtg, model):
+    return 'Plots Generated ' + lt.human_date(cdtg) \
+         + ' NRL/Monterey Aerosol Modeling\n' \
+         + mod_dict[model]['foot']
+
+def getHead(analysisTime, vt,  tau, model, spec, title):
+    timeStr = datetime.strftime(analysisTime, "%A %d %B %Y %H") + " UTC"
+    vtime   = datetime.strftime(vt, "%A %d %B %Y %H") + " UTC"
+
+    title = "%s  %s  Forecast t+%s \n%s Valid Time\n%s  %s" %  \
+             (timeStr, model, str(tau).zfill(3), vtime, spec.upper(), title)
+    title = title.replace('NMMB-','NMMB/')
+    #if is_ens: title = ' '.join(( title, '(', 'nMEM', '=', str(nens), ')' ))
+    print(title)
+    return title
+
+
+if __name__ == '__main__':
+    #_Initialize
+    if(len(sys.argv) == 1):
+        print("required action  plot, download, or both")
+        sys.exit(1)
+        
+
+    auto = False    #_Auto influences which dtgs get run
+    actions = {"download" : False, "plot" : False}
+    
+    n = time.gmtime( time.time() )
+    dtg = str(n.tm_year) +  \
+          str(n.tm_mon).zfill(2) +    \
+          str(n.tm_mday).zfill(2) +   \
+          '00'    #_Always drop to 00z str(n.tm_hour).zfill(2)\
+
+    #_See if command line arguments are pass
+    if len(sys.argv) == 3:      #_One argument, should be dtg
+        dtg = sys.argv[2]
+
+    action  = sys.argv[1]
+    print(action)
+    if(action == 'download'): actions['download'] = True
+    if(action == 'plot'):     actions['plot']     = True
+    if(action == 'all'):
+      actions['download'] = True
+      actions['plot'] = True
+
+
+    run_main( dtg, actions, auto=auto )

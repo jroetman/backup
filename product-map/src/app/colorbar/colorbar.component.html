@@ -1,0 +1,88 @@
+<div class="colordomain">
+       <div class="group">
+           <div>
+                 Linear  <input [(ngModel)]="colorOptions.type" name="type_{{layer.guid}}_{{parent_guid}}" (change)="updateType()" value="Linear" type="radio" />
+                 Log     <input [(ngModel)]="colorOptions.type" name="type_{{layer.guid}}_{{parent_guid}}" (change)="updateType()" value="Log"    type="radio" />
+           </div>
+       </div>
+
+       <div id="color_{{layer.guid}}"> </div>
+       <div>[{{domains}}] </div>
+       <div class="">
+        <button class="editColors" (click)="editColors=!editColors"> Edit Colors </button>
+       </div>
+</div>
+
+<div *ngIf="editColors" class="colorEdit" >
+      <div class="select">
+         <label> Selected </label> 
+          <select [(ngModel)]="colorId" (change)="updateSelected()" >
+              <option *ngFor="let c of colors" [ngValue]="c.id" > {{c.name}} </option>
+         </select>
+         <button class="removeBtn" (click)="cancel()"> X </button>
+      </div>
+      <!-- div>
+         <label> Name: </label><input type="text" [value]="colorName"  (change)="colorName=$event.target.value" />
+      </div -->
+      <div> 
+      <table class="colorTable" align="">
+          <tr>
+              <td *ngFor="let p of palette; let i = index"> 
+                  <button *ngIf="i > 0 && i < palette.length" class="addBtn" (click)="addColor(i)">+</button> 
+              </td>
+          </tr>
+          <tr>
+             <td> <button class="addBtnEnd" (click)="addColor(0)">+</button></td>
+             <td class="pcolor" *ngFor="let p of palette; let i = index; trackBy:indexTrack"> 
+                <input [(colorPicker)]="palette[i]" [style.background]="p" [cpOKButton]="true" (colorPickerSelect)="updatePalette()" /> 
+                <!--label [style.background-color]="p">
+                    <input class='hidden' (change)="updatePalette($event, i)" type="color" value={{p}} />
+                </label -->
+             </td>
+             <td> <button class="addBtnEnd" (click)="addColor(palette.length)">+</button> </td>
+          </tr>
+           <tr *ngIf="palette.length > 1" >
+               <td> </td>
+               <td  *ngFor="let p of palette; let i = index"> 
+                  <button class="removeBtn" (click)="removeColor(i)">-</button>
+               </td>
+          </tr>
+      </table>
+      </div>
+      
+      <div class="domains">
+         <h4> Domains </h4>
+         <div> 
+             <label>By Range</label> <input (change)="updateDomainType()" type="radio" value="domainRange"  name="domainType" [(ngModel)]="domainType">
+         </div>
+         <div *ngIf="domainType=='domainRange'">
+           <div>
+              <input *ngFor="let d of domains; let i = index; trackBy:indexTrack" [(ngModel)]="domains[i]" (change)="updateDomains()" type="number" /> 
+           </div>
+         </div>
+         <div> 
+            <label>Per Color</label><input (change)="updateDomainType()" type="radio" value="specificDomain" name="domainType" [(ngModel)]="domainType">
+         </div>
+         <div *ngIf="domainType=='specificDomain'">
+           <div>
+              <input *ngFor="let d of domains" (change)="updateDomains()" type="number" [value]="d" /> 
+           </div>
+         </div>
+
+      </div>
+
+      <div *ngIf="saveBar" class="saveBar"> 
+        <button class="resetBarBtn" (click)="reset()"> Reset </button>
+        <div class="save">
+           <button class="saveBarBtn" (click)="saveColorbar()"> Save Colorbar </button>
+           <button class="cancelBarBtn" (click)="cancel()"> Cancel </button>
+        <div>
+      </div>
+
+   </div>
+   
+
+   <div id="{{cid}}"> </div>
+   <button *ngIf="needsUpdate" class="update" (click)="update()" [ngClass]="{'needsupdate' : needsUpdate}" > Update Plots </button>
+</div>
+
