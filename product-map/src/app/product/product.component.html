@@ -12,13 +12,13 @@
            {{rt.name}}
         </h4>
         <ul>
-        <li *ngFor="let p of rt.entities | keys; ">
+        <li *ngFor="let p of rt.entities | keys; trackBy:rtTrack ">
             <!-- div (click)="selectProducts(i, p)" class="productLink">
               <label class="navlink" >{{p}}</label>
               <div *ngIf="!showProducts[i + p]" class="arrow">&#x25B3; </div>
               <div *ngIf="showProducts[i + p]" class="arrow">&#x25BD; </div>
             </div -->
-            <div *ngIf="showProducts[i + p]" id="sidebar">
+            <div id="sidebar">
                 <app-sidebar  [products]=rt.entities[p].products> </app-sidebar>
             </div>
         </li>
@@ -34,7 +34,7 @@
           <div *ngIf="showProducts[spec.name]" class="arrow">&#x25BD; </div>
         </div>
         <ul>
-        <div *ngIf="showProducts[spec.name]" id="sidebar">
+        <div *ngIf="showProducts[spec.name]">
             <app-sidebar  [products]=spec> </app-sidebar>
         </div>
         </ul>

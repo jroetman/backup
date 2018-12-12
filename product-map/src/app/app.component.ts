@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
 
 
     if(state) {
-       this.data.changeMessage(JSON.parse(state))
+       //this.data.changeMessage(JSON.parse(state))
     }
     const colors = this.colors.getColors(); 
     this.data.changeMessage({colors: colors})
@@ -31,6 +31,7 @@ export class AppComponent implements OnInit {
     this.data.currentMessage.subscribe(state => {
        this.showGallery = state.showGallery;
        this.showProducts = state.showProducts;
+       this.selectedProducts = state.selectedProducts;
        this.showInstructions = state.showInstructions;
     });
   }

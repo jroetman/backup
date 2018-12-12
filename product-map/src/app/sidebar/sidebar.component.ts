@@ -9,9 +9,13 @@ import * as moment from "moment"
 })
 export class SidebarComponent implements OnInit {
 
+  
+  showMe: any = {};
+  mapChanged : boolean = true;
   searchView : string = 'product';
   selectedProduct: string;
   selectedProducts: any[];
+  productSelection: any  = {};
   @Input('products') products: any[];
 
   constructor(private data: DataService) { }
@@ -20,10 +24,47 @@ export class SidebarComponent implements OnInit {
      if(this.products) return this.products[index].name;
   }
 
+  getLayerSelected(p,f){
+     let index = -1;
+     const map = this.selectedProducts.find(sp => sp.name == this.productSelection.name);
+
+     if (map && map.layers)
+         index = map.layers.findIndex(l => l.model == p.model && l.field.varname == f.varname)
+
+     return index;
+  }
+
+  addLayer(p,f){
+    const prods = JSON.parse(JSON.stringify(this.selectedProducts))
+    const map = prods.find(p => p.name == this.productSelection.name);
+    let lidx = this.getLayerSelected(p,f) 
+
+    if (lidx >= 0) {
+        map.layers.splice(lidx,1) 
+ 
+    } else {
+        const layer = this.getSelectedProduct(p,f)
+        layer.options.isVisible = true;
+        map.layers.push(layer)
+    }
+
+    map.layersUpdated = moment()
+    this.data.changeMessage({selectedProducts : prods});
+  }
+
+  getLatest(prod){
+     let latest = ""
+     const images = prod.images
+     if(Array.isArray(prod.images) && prod.images.length == 1){
+       latest =   prod.images[0].latest ? "Latest: " + prod.images[0].latest : "";
+      
+     }
+     return latest;
+  }
+
   getAvailability(prod){
      let cname = "bad"
-     const numTaus = prod.images.length;
-
+     const numTaus = Array.isArray(prod.images) && prod.images.length;
      if (numTaus) {
        if (numTaus >= 15) cname = "good"
        if (numTaus < 15 ) cname = "warning"
@@ -60,6 +101,10 @@ export class SidebarComponent implements OnInit {
            if(JSON.stringify(this.selectedProducts) != sps) {
                this.selectedProducts =JSON.parse(sps)
            }
+           if(this.productSelection.name != state.productSelection.name){
+               this.productSelection = state.productSelection;
+           }
+           this.highlightFields = state.highlightFields;
            this.showInstructions = state.showInstructions;
      //    this.selectedProduct = state.selectedProduct;
    //      this.searchView   = state.searchView;

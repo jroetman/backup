@@ -1,16 +1,26 @@
 .option{
-  position:relative;
+  opacity:0.6;
+  border:1px solid #aaa;
+  border-radius:5px;
+  margin-bottom:5px;
+  text-align:left;
 
   .title {
      display:flex;
      justify-content: space-between;
      padding:2px;
+     cursor:pointer;
+
   }
 
-  border:2px solid black;
-  border-radius:5px;
-  text-align:left;
-  border-bottom:1px solid #777; 
+ &.mapSelected {
+     opacity:1;
+     .title {
+       background:#05a;
+      }
+      box-shadow: 0px 0px 5px 2px white;
+      border:1px solid beige;
+  }
 
   h5 {
    padding:1px;
@@ -72,6 +82,8 @@ button {
        display:flex;
        justify-content: space-around;
 
+       
+       .btn {font-size:1.2em; width:35%;}
        .target{
             display:flex;
             margin-top:10px;
@@ -79,9 +91,8 @@ button {
             align-items:center;
             justify-content:center;
             text-align:center;
-            width:140px;
-            height:110px;
-            border:3px dashed #666;
+            width:80%;
+            height:50px;
         }
         
         &.over {

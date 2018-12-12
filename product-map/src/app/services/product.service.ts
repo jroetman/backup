@@ -10,9 +10,12 @@ export class ProductService {
 
     constructor(private data: DataService){}
 
-    getRegionTree() {
+    getRegionTree(prods) {
         const ms = this.data.getMessageSource().getValue();
-        const prods = ms.products;
+        if (!prods) {
+            prods = ms.products;
+        }
+
         const extent = ms.extent;
         const searchView = ms.searchView;
         const searchFilter = ms.searchfilter;
@@ -20,11 +23,13 @@ export class ProductService {
         if( prods && prods.length > 0) {
             let filtered = filterByExtent(prods, extent)
             let rt = [];
+            console.log("filter")
 
-            if(searchFilter && searchFilter != "" && searchView == "product"){
-                filtered = filterBySearch(filtered, searchFilter) 
-                filtered = filterByVar(filtered, searchFilter) 
-            }
+        //    if(searchFilter && searchFilter != "" && searchView == "product"){
+                console.log("filter")
+         //       filtered = filterBySearch(filtered, searchFilter) 
+          //      filtered = filterByVar(filtered, searchFilter) 
+          //  }
 
             if(searchView == 'product') rt = buildRegionTree(filtered)
             if(searchView == 'species') rt = buildSpeciesTree(filtered, searchFilter)
@@ -60,10 +65,11 @@ export class ProductService {
         //}
     }
   
-    getProducts() {
+    getProducts(filterStr) {
         const prods = [];
-
-        fetch("http://docker.nrlmry.navy.mil:5000/icap/getProducts").then(res =>{
+        let f = "";
+        if(filterStr) f = "?f=" + filterStr 
+        fetch("http://docker.nrlmry.navy.mil:5000/icap/getProducts" + f).then(res =>{
             return res.json();
 
         }).then(json => {
@@ -72,7 +78,6 @@ export class ProductService {
            
            Object.keys(json).forEach(model => {
                 const  m = json[model] 
-                console.log(m)
                 const fields = m.fields.sort((a,b) => {
                    if (a.alias < b.alias) return -1
                    if (a.alias > b.alias) return 1
@@ -91,9 +96,11 @@ export class ProductService {
                       fieldType : 'discover',
                       colors: m.colors
                 }
-                prods.push(np)
+                
+               prods.push(np)
 
            })
+        this.getRegionTree(prods)
         this.data.changeMessage({productsUpdate: moment(), products : prods});
        
      })

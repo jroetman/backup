@@ -1,17 +1,19 @@
-<div id="sidebar">
+<div id="sidebar" [class.highlightFields]="highlightFields">
   <div class="head">
   </div>
   <ul *ngIf="searchView == 'product'" class="products"> 
       <li *ngFor="let p of products; let i = index; trackBy:productIndex" class="fields">
-          <div class="title">
+          <div class="title" (click)="showMe[i] = !showMe[i]">
               <a class="name" [class.odd]="i%2 == 0" > {{p.name}} </a>
+              <div class="latest">{{getLatest(p)}} </div>
               <div class="spacer">
                 <div [class]="getAvailability(p)"> </div>
               </div>
           </div>
-          <ul class="species">
-              <li *ngFor="let f of p.fields; let fi = index"> 
-                   <div class="name" draggable="true" (dragstart)="startDrag($event, p,f)" (dragend)="draggin=false" [class.dragging]="dragging" (dblclick)="addProductToGallery(p,f)">{{f.alias}} </div>
+          <ul class="species" *ngIf="showMe[i]">
+              <li [class.selected]="getLayerSelected(p,f) >= 0"  *ngFor="let f of p.fields; let fi = index" (click)="addLayer(p,f)"> 
+                   <div class="name" draggable="true" (dragstart)="startDrag($event, p,f)" (dragend)="draggin=false" [class.dragging]="dragging"  (dblclick)="addProductToGallery(p,f)">{{f.alias}} </div>
+                   <input *ngIf="productSelection.name" type="checkbox" (click)="$event.stopPropagation()" (change)="addLayer(p,f)" [checked]="getLayerSelected(p,f) >= 0">
               </li>
           </ul>
       </li>

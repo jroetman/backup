@@ -119,12 +119,22 @@ def getColors():
 
 @app.route('/icap/getProducts')
 def getProducts(): 
-  return QueryUtils.getProducts()
+  filterStr= request.args.get('f')
+  return QueryUtils.getProducts(filterStr)
+
+@app.route('/icap/saveMap', methods=['POST'])
+def saveMap():
+  json = request.get_json()
+  mapId   = json.get('mapId')
+  props   = json.get('props')
+
+  QueryUtils.saveMap(mapId, props)
+  return "Saved"
+
 
 @app.route('/icap/updateColor', methods=['POST'])
 def updateColor(): 
   json = request.get_json()
-  print(json)
   colorId  = json.get('colorId')
   domains = json.get('domains')
   palette  = json.get('palette')

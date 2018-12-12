@@ -234,7 +234,6 @@ export class ColorbarComponent implements OnInit {
   }
 
   updateColorChoice(){
-      console.log("updating color choice")
       const color = this.color;
       this.domains = color.domains.split(",")
       this.palette = color.palette.split(",")

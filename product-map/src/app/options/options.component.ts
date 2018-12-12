@@ -20,10 +20,18 @@ export class OptionsComponent implements OnInit {
 
   constructor(private data: DataService) { }
 
+  highlightFields(highlight){
+    this.data.changeMessage({highlightFields: highlight})
+  }
+
   removeProduct(p){
       this.data.removeProduct(p);
   }
 
+  selectProducts(){
+     this.data.changeMessage({productSelection : this.map})
+     
+  }
 
   dragover(evnt){
     evnt.preventDefault();
@@ -67,6 +75,7 @@ export class OptionsComponent implements OnInit {
       this.guid = this.map.name;
 
       this.data.currentMessage.subscribe(state => {
+          this.productSelection = state.productSelection
           this.colors = state.colors ? state.colors : [];
           const stateSp = JSON.stringify(state.selectedProducts);
 

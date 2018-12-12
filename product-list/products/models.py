@@ -1,9 +1,18 @@
 from django.db import models
+from django.contrib.postgres.fields import JSONField
 
+
+class LevelTypeLevels(models.Model):
+    level_type       = models.ForeignKey('LevelType', on_delete=models.SET_NULL, blank=True, null=True)
+    level            = models.CharField(max_length=100, help_text='name', blank=True, null=True)
+
+    def __str__(self):
+        """String for representing the Level Type"""
+        return self.name
 
 class LevelType(models.Model):
-    type_id   = models.FloatField(help_text='Type Id', blank=False, null=False)
-    name      = models.CharField(max_length=100, help_text='name', blank=True, null=True)
+    level_type_id = models.IntegerField(help_text='level type id', blank=True, null=True)
+    name        = models.CharField(max_length=100, help_text='name', blank=True, null=True)
     description = models.CharField(max_length=200, help_text='Units', blank=True, null=True)
 
     def __str__(self):
@@ -11,8 +20,9 @@ class LevelType(models.Model):
         return self.name
 
 class Level(models.Model):
+    field = models.ForeignKey('Field', on_delete=models.SET_NULL, blank=True, null=True)
     level = models.CharField(help_text='Level', max_length=20, blank=False, null=False)
-    display_name = models.CharField(max_length=10, help_text='name', blank=True, null=True)
+    display_name = models.CharField(max_length=100, help_text='name', blank=True, null=True)
     level_type= models.ForeignKey('LevelType', on_delete=models.SET_NULL, blank=True, null=True)
     color_scale = models.ForeignKey('ColorScale', on_delete=models.SET_NULL, null=True, blank=True)
 
@@ -23,10 +33,10 @@ class Level(models.Model):
 class Field(models.Model):
     varname = models.CharField(max_length=300, help_text='Variable name as found in netcdf file')
     alias   = models.CharField(max_length=200, help_text='Alias for this field', blank=True)
-    model   = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True)
     units   = models.CharField(max_length=50, help_text='Units', blank=True, null=True)
-    levels  = models.ManyToManyField(Level, blank=True)
-
+    options = models.CharField(max_length=1000, help_text='options', blank=True, null=True)
+    model   = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True)
+    level_type= models.ForeignKey('LevelType', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -54,6 +64,9 @@ class Product(models.Model):
     foot       = models.CharField(max_length=200, help_text='Footer for plots', blank=True)
     fields     = models.ManyToManyField(Field, blank=True)
 
+class Maps(models.Model):
+    map_id = models.CharField(max_length=200, help_text='Map ID')
+    props  = JSONField(help_text='map props')
 
     def __str__(self):
         """String for representing the Model object."""

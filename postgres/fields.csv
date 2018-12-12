@@ -1,15 +1,56 @@
-id|varname|alias|model_id
-1|total_aod|Total AOD|3
-2|sulfate_aod|Sulfate|3
-3|smoke_aod|Smoke|3
-4|seasalt_aod|Seasalt|3
-5|dust_aod|Dust|3
-6|frz_ht_zeroDegc_isoterm|frz_ht|2
-7|abs_vort_isobaric|Abs Vort|2
-8|air_temp_isobaric|Air Temp|2
-9|dwpt_dprs_isobaric|Dwpt Dprs|2
-10|geop_ht_isobaric|Geop Ht|2
-11|rltv_hum_isobaric|Rltv Hum|2
-12|wnd_vert_vel|Wnd Vert Vel|2
-13|sky_cvr|Sky Cvr|2
-14|ttl_prcp_surface_6_Hour_Accumulation|Total Prcp 6 Hour|2
+varname|alias|model_id|options|level_type_id
+total_aod|Total AOD|3||45
+sulfate_aod|Sulfate|3||45
+smoke_aod|Smoke|3||45
+seasalt_aod|Seasalt|3||45
+dust_aod|Dust|3||45
+total_aod|Total AOD|4||45
+sulfate_aod|Sulfate|4||45
+smoke_aod|Smoke|4||45
+seasalt_aod|Seasalt|4||45
+dust_aod|Dust|4||45
+dust_aod|Dust|6||45
+total_aod|Total AOD|7||45
+sulfate_aod|Sulfate|7||45
+blackcarbon_aod|Black Carbon|7||45
+organiccarbon_aod|Organic Carbon|7||45
+seasalt_aod|Seasalt|7||45
+dust_aod|Dust|7||45
+ocd_part_w550|Total AOD|5||45
+ocd_abf_w550|Sulfate|5||45
+ocd_frp_w550|Smoke|5||45
+ocd_sslt_w550|Seasalt|5||45
+ocd_dust_w550|Dust|5||45
+frz_ht_zeroDegC_isotherm|frz_ht|2||2
+abs_vort_isobaric|Abs Vort|2||8
+air_temp_isobaric|Air Temp|2||8
+dwpt_dprs_isobaric|Dwpt Dprs|2||8
+geop_ht_isobaric|Geop Ht|2||8
+rltv_hum_isobaric|Rltv Hum|2||8
+wnd_vert_vel_isobaric|Wnd Vert Vel|2||8
+sky_cvr|Sky Cvr|2||21
+ttl_prcp_surface_6_Hour_Accumulation|Total Prcp 6 Hour|2||1
+grnd_sea_temp_surface|Grnd Sea Temp Sfc|2||1
+cape_surface|Cape Sfc|2||1
+dwpt_dprs_surface|Dwpt Sfc|2||1
+prcp_h2o_surface|Prcp H20 Sfc|2||1
+pres_surface|Pres Sfc|2||1
+wnd_spd|Wind Speed (Vector)|2|[{"name" : "plotType", "type" : "radio", "options" : [{"name":"Streamlines"}, {"name":"Barbs"}, {"name":"Quiver"}]}]|8
+peak_wnd_spd_surface|Peak Wind Speed SFC|2||1
+ttl_cld_cvr_sky_cvr|Total Cld Cvr|2||21
+ttl_cld_cvr_low_cld|Total Low Cld Cvr |2||28
+ttl_cld_cvr_mid_cld|Total Mid Cld Cvr |2||29
+ttl_cld_cvr_hi_cld|Total High Cld Cvr |2||30
+Upward_long-wave_radiation_flux_atmosphere_top|Upward LW Flux Atmos|2||6
+AOT_Merged|OT_Merged|1||46
+AOT_Pure|OT_Pure|1||46
+AOT_Merged_uncertainty|OT_Merged_uncertainty|1||46
+AOT_Pure_uncertainty|OT_Pure_uncertainty|1||46
+AE_Merged|E_Merged|1||46
+AE_Pure|E_Pure|1||46
+AOT_L2_Mean|OT_L2_Mean|1||46
+AOT_L2_SDV|OT_L2_SDV|1||46
+AOT_L2_Num|OT_L2_Num|1||46
+AE_L2_Mean|E_L2_Mean|1||46
+AE_L2_SDV|E_L2_SDV|1||46
+AE_L2_Num|E_L2_Num|1||46

@@ -56,6 +56,10 @@ export class ProductComponent implements OnInit {
       this.data.changeMessage({showProducts: this.showProducts, selectedRegion: region, selectedProduct: key});
   }
 
+  rtTrack(index: number, value: any){
+    return value;
+  }
+
   ngOnInit() {
     
 
@@ -68,10 +72,9 @@ export class ProductComponent implements OnInit {
            this.currentDtg = moment(state.currentDtg)
            if(Array.isArray(this.products)) this.discoverProductVars();
 
-       }
-
-       if(state.products && !this.productsUpdate.isSame(state.productsUpdate)) {
-           this.productsUpdate = state.productsUpdate
+       } else if(state.products && !this.productsUpdate.isSame(state.productsUpdate)) {
+           this.currentDtg = moment(state.currentDtg)
+           this.productsUpdate = moment(state.productsUpdate)
            this.products = state.products
            this.discoverProductVars();
        } 
@@ -81,7 +84,7 @@ export class ProductComponent implements OnInit {
 
            this.extent = JSON.parse(extent)
            this.searchView = JSON.parse(searchView)
-           this.prodSvc.getRegionTree()
+          // this.prodSvc.getRegionTree()
 
        }
 
@@ -90,8 +93,9 @@ export class ProductComponent implements OnInit {
            
        }
 
-       if(state.regionTree){
+       if(state.regionTree && !this.regionTreeUpdated.isSame(state.regionTreeUpdated)){
            this.regionTree = state.regionTree
+           this.regionTreeUpdated = moment(state.regionTreeUpdated);
        }
   
     });

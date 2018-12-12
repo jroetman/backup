@@ -49,8 +49,6 @@ export class ImageComponent implements OnInit, OnDestroy {
   }
 
   loadImage(){
-      console.log("LOAD IMAGE")
-      console.log("total images: " this.numImages)
       let p = this.product
 
       let e = this.extent
@@ -73,7 +71,10 @@ export class ImageComponent implements OnInit, OnDestroy {
 
           if(!this.checkLoad)  {
               this.checkLoad = setInterval(() => {
-                 let iscomplete =document.getElementById(this.product.name).complete;
+                 const pe = document.getElementById(this.product.name)
+
+                 let iscomplete = true;
+                 if(pe != null) iscomplete = pe.complete;
 
                  if(iscomplete) {
                     clearInterval(this.checkLoad)

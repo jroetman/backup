@@ -121,7 +121,6 @@ export class TimelineComponent implements OnInit {
     const plotMargins = this.plotMargins;
     const xScale = this.xScale;
 
-    console.log(this.times)
     let circs = this.svgTaus.selectAll("circle").data(this.times.times);
     circs.exit().remove();
 
@@ -140,25 +139,21 @@ export class TimelineComponent implements OnInit {
          return `translate(${plotMargins.left},${0})`
       });
 
-      
       //Updates to circles
       circs.transition()
          .duration(500)
          .attr("cx",function(d){ return xScale(d.tau)})
          .attr("cy", function(d, idx) {
-            console.log(d.guid)
             return yScale(d.guid)
            })
          .style("fill", function(d){
          return d.valid ? "green" : "red" 
          });
 
-     console.log("update slider from ")
      this.updateSlider();
   }
 
   clearTaus(){
-     console.log("clear Taus")
      d3.selectAll(".tauCircle").remove();
   }
 

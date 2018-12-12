@@ -1,5 +1,5 @@
-<div class="option">
-    <h4 class="title"> 
+<div class="option" (click)="selectProducts()" [class.mapSelected]="productSelection && productSelection.name == map.name">
+    <h4 class="title" > 
          {{map.name}}
          <div class="remove" (click)="removeProduct(map.name)"> X </div>
     </h4>
@@ -10,15 +10,16 @@
               <div class="" *ngIf="!showLayers"> &#x25BC; </div>
         </div> 
         
-        <div [class.hideLayers]="showLayers">
+        <div [class.hideLayers]="showLayers || !(productSelection.name == map.name) ">
             <div> 
                 <div *ngFor="let l of map.layers">
                     <app-layer [parent_guid]="map.name" [layer]="l"> </app-layer>
                 </div>
             </div>
             <div class="dropZone">
-                <div class="target" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addLayer($event)" [class.over]='over'>
-                   <p>Drag Field Here To Add Layer</p>
+                <div class="target" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addLayer($event)" (mouseover)="highlightFields(true)" (mouseout)="highlightFields(false)" [class.over]='over'>
+                    Select Fields On Left
+                   <!--button class="btn" (click)="selectProducts()">+</button -->
                 </div>
             </div>
        </div>

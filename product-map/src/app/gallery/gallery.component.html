@@ -1,4 +1,4 @@
-<div id="gallery">
+<div class="gallery">
      <div *ngIf="!showOptions" class="toggleMin" (click)="showOptions = !showOptions">
          <div class="option"> Maps </div>
 
@@ -8,21 +8,22 @@
           <div *ngIf="showOptions" class="toggleBtn" (click)="showOptions = !showOptions">
               <span>&#x25C1;</span>
           </div>
-          <div  *ngFor="let sp of selectedProducts; let i = index; trackBy: trackByFn" class="options" >
+          <div  *ngFor="let sp of selectedProducts; let i = index; trackBy: trackByFn" >
                  <app-options [idx]="i + 1" [map]="sp"> </app-options>
           </div>
     
           <div class="dropZone" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addProduct($event)" [class.over]='over'>
-             <div>Drag Field Here</div>
-             <div>OR</div>
-             <button class="btn" (click)="createMap()">Create New Map </button>
+             <button class="btn" (click)="createMap()">+</button>
           </div>
 
      </div>
      <div class="images">
         <!--div [ngClass]="{'halfWidth' : products.length > 1}" *ngFor="let p of products"-->
         <div class="galleryOptions">
-           Images Per Row <input type="number" max="4" min="1" onkeydown="return false" size=7 [(ngModel)]="imgPerRow" /> 
+           <label> IMAGES PER ROW: </label>
+           <table [class.active]="imgPerRow==1" (click)="imgPerRow=1" class="rowChoice r1"><tr><td></td></tr></table>
+           <table [class.active]="imgPerRow==2" (click)="imgPerRow=2" class="rowChoice r2"><tr><td></td><td></td></tr></table>
+           <table [class.active]="imgPerRow==3" (click)="imgPerRow=3" class="rowChoice r3"><tr><td></td><td></td><td></td></tr></table>
         </div>
 
         <h3 *ngIf="selectedProducts && selectedProducts.length == 0"> No Products Selected</h3>

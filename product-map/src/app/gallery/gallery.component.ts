@@ -7,10 +7,11 @@ import * as moment from 'moment';
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss']
 })
+
 export class GalleryComponent implements OnInit {
   showOptions: boolean = true;
   selectedProducts: any[] = [];
-  imgPerRow: int = 1;
+  imgPerRow: int = 2;
   selectedProductUpdate: moment = moment();
   currentTau: any;
   currentDtg: any;
@@ -27,7 +28,6 @@ export class GalleryComponent implements OnInit {
 
   dragover(evnt){
     evnt.preventDefault();
-    console.log("over")
     this.over = 'over'
 
   }
@@ -70,7 +70,6 @@ export class GalleryComponent implements OnInit {
   ngOnInit() {
 
     this.data.currentMessage.subscribe(state => {
-         console.log("gallery update")
          let options = {}
          const region = this.selectedRegion
          this.colors = state.colors;

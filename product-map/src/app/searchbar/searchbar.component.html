@@ -1,3 +1,4 @@
 <div>
-    <p> Search:   <input (keyup)="onKey($event)"> </p>
+    <input [(ngModel)]="search" > 
+    <button (click)="updateProds()" class="btn"> search </button>
 </div>

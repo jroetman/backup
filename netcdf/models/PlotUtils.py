@@ -8,6 +8,7 @@ import models.ColorUtils as ColorUtils
 from collections import OrderedDict
 from netCDF4 import  num2date
 import models.QueryUtils as QueryUtils
+import math
 
 plot_dir = "/plots"
 plot_out_dir = ""
@@ -43,20 +44,30 @@ def getHead(analysisTime, vt,  tau, model, var, title):
 def getDisplayDate(dtg):
     return datetime.strftime(dtg, "%A %d %B %Y %H") + " UTC"
 
-def processTimeDim(ncfile, model, file):
+def processTimeDim(ncfile, model, dtg, file):
+    print("ptimedim",model['name'] )
     variables = ncfile.variables
     time = variables['time']
-    atime = datetime.strptime(model['dtg'],"%Y%m%d%H")
+    atime = datetime.strptime(dtg,"%Y%m%d%H")
 
     #if this can't convert to times, the times might be simply ints,.. 0,6,12,18...
     try:
         #times = num2date(time[:], time.units, time.calendar)
-        times = num2date(time[:], time.units)
+   
+        attrs = time.ncattrs()
+        if 'units' not in attrs:
+            units = 'seconds since 1970-1-1'
+        else:
+           units = time.units
+ 
+        times = num2date(time[:], units)
 
     except:
-        print("num2date failed")
-        units = "hour"
-        if time.units:
+
+        units = "hours"
+        attrs = time.ncattrs()
+
+        if 'units' in attrs:
             if "seconds" in time.units:
                   units = "seconds"
 
@@ -65,6 +76,7 @@ def processTimeDim(ncfile, model, file):
 
         else:
             times = list(map(lambda t : (atime + timedelta(hours=int(t))), time[:]))
+
 
     modelName = model['name']
     result = []
@@ -93,6 +105,37 @@ def getVars(ncfile, field="", var=""):
     return (nvars, dims)
     
     
+def getImagePath(filepath, model, dtg, var):
+    res = []
+    try:
+        ncfile  = Dataset(filepath, "r")
+        if 'time' in ncfile.dimensions:
+            res = processTimeDim(ncfile, model, dtg, filepath) 
+    
+        else: 
+
+            timestr = re.search(model['time_regex'],filepath).group(1)
+            dtime   = datetime.strptime(timestr, model['time_format'])
+            timestr = datetime.strftime(dtime, "%Y%m%d%H")
+            print("getImgPath",filepath, timestr)
+
+            res = [{'time' : dtime.isoformat(),
+                   'timestr' : timestr,
+                   'var' : var,
+                   'file' : filepath,
+                   'url'  : 'http://docker.nrlmry.navy.mil:5000/icap/plotNetcdf?model=%s&var=%s&dtg=%s' %                   (model['name'],var, model['dtg'] )}]
+        
+        ncfile.close()
+        print(res)
+    
+    except Exception as e:
+        logging.exception("ncfile not found for %s %s" % (model['name'], model['dtg']))
+        print("ncfile not found for %s %s" % (model['name'], model['dtg']))
+        pass
+
+    return res
+
+
 #This is making assumptions that the model netcdf file has the same times for every species
 def getImagePaths(model, var=""):
     result = []
@@ -100,35 +143,55 @@ def getImagePaths(model, var=""):
 
     if 'name' in model:
         modelName = model['name']
-        filepath = model['ncfile']
+        filepath  = model['path']
+        dtg = model['dtg']
 
         #identify files with time dim or time as part of filename 
-        if ncfile != "":
-            try:
-                ncfile  = Dataset(filepath, "r")
-                if 'time' in ncfile.dimensions:
-                    res= processTimeDim(ncfile, model, filepath) 
-                    result = result + res
-            
-                else: 
-                    timestr = re.search(model['timeRegex'],filepath)[1] 
-                    dtime   = datetime.strptime(timestr, model['timeFormat'])
-                    timestr = datetime.strftime(dtime, "%Y%m%d%H")
-            
-                    res = {'time' : dtime.isoformat(),
-                           'timestr' : timestr,
-                           'var' : var,
-                           'file' : file,
-                           'url'  : 'http://docker.nrlmry.navy.mil:5000/icap/plotNetcdf?model=%s&var=%s&dtg=%s' %                   (modelName,var, model['dtg'] )}
-                    result.append(res)
-            
-                ncfile.close()
-            
-            except Exception as e:
-                print(traceback.format_exc())
-                logging.exception("Failed to get files")
+        if('isdaily' in model and  model['isdaily'] == True):
+            dir_out = filepath.replace('dtg', dtg[:6])
+            dir_out += dtg[6:8] + "/"
+            print(dir_out)
 
+        else:
+            dir_out = filepath.replace('dtg', dtg[:6])
+
+        filename = getProductFile(dir_out, dtg)
+        filep = dir_out + filename 
+        result = getImagePath(filep, model, dtg, var)
+
+        if len(result) == 0:
+          daysBack = 0;
+          prevday = datetime.strptime(model['dtg'],"%Y%m%d%H")
+          while daysBack < 100: 
+              prevday = prevday - timedelta(days=1)
+              prevdaystr = datetime.strftime(prevday, "%Y%m%d%H")
+              dir_out = model['path'].replace('dtg', prevdaystr[:6])
+              filename = getProductFile(dir_out, prevdaystr)
+              daysBack += 1
+
+              if filename != "":
+                filepath  = dir_out + filename 
+                res = getImagePath(filepath, model, prevdaystr, var)
+                if res is not None and len(res) > 0:
+                    result += [{"latest" : res[0]['time']}]
+                break;
+       
     return result
+
+#duplicated in QueryUtils
+def getProductFile(dir_out, dtg):
+    ncfile = "" 
+    try:
+       for file in os.listdir(dir_out):
+           if dtg[:8] in file:
+              if file.endswith(".nc") and dtg[:8] in file:
+                  ncfile = file
+                  break;
+    except Exception as e:
+        #print("File Not Found %s %s" % (dir_out, dtg[:8])) 
+        pass
+
+    return ncfile;
             
     
 def getLatLonIdx(lats, lons, extent):
@@ -242,7 +305,8 @@ def getVals(model, props):
 
         vals = variables[nvar]
         dims = list(map(lambda d : d if type(d) is not str else 0 , dims))
-        vals = vals[dims[0]]
+        if len(dims) > 0:
+          vals = vals[dims[0]]
 
         if len(dims) == 2:
             vals = vals[dims[1]]
@@ -280,7 +344,8 @@ def genLevelCmap(domains, palette):
     cmap = colors.ListedColormap(palette)
 
     if len(levs) == 2:
-        levs = np.arange(levs[0], levs[-1], 5)
+        diff = abs(levs[-1] - levs[0]) 
+        levs = np.arange(levs[0], levs[-1], diff * .10)
         cmap = colors.LinearSegmentedColormap.from_list('cmap', palette, N=len(levs))
 
     return levs, cmap
@@ -296,8 +361,7 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
     roll = None
     vals = []
 
-    ax = plt.subplot2grid((6,1),(0,0), rowspan=5, projection=proj)
-
+    ax = plt.subplot2grid((100,1),(0,0), rowspan=70, projection=proj)
     for l in layers:
        
         if 'isVisible' not in  l['options'] or l['options']['isVisible'] != False:
@@ -307,6 +371,8 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
 
                 #add dataset to dict, so we can close later
                 npath             = layerModel['ncfile']
+                
+                print("LAYERM",layerModel, npath)
                 ncfileDict[npath] = Dataset(npath, "r")
                 nvar = l['field']['varname']
 
@@ -316,6 +382,9 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                 lats = ll['lats'][:]
                 lons = ll['lons'][:]
                 roll = ll['roll']
+
+                extent, proj, centralLon, lons = adjustForDateline(extent, proj, lons)
+                ax.projection=proj
 
                 llIdxs = getLatLonIdx(lats, lons, extent)
                 ulatidx = llIdxs['ulatidx'] + 10 
@@ -327,14 +396,10 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                 lons    = lons[llonidx:ulonidx]
                 lats    = lats[llatidx:ulatidx]
 
-                extent, proj, centralLon, lons = adjustForDateline(extent, proj, lons)
+
                 levs, cmap = genLevelCmap(layerModel['domains'], layerModel['palette'])
-
                 norm   = colors.BoundaryNorm(levs, cmap.N) #BoundaryNorm(levs, cmap.N)
-
-               
                  
-              
                 print(layerModel['options'])
                 if 'color' in layerModel['options']: 
                     if 'type' in layerModel['options']['color']:
@@ -386,60 +451,65 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
         ax.add_feature(cfeature.COASTLINE.with_scale('10m'))
         ax.add_feature(cfeature.BORDERS)
         
-        gl = None;
-        cs = ccrs.PlateCarree()
+        if len(axes) == 1:
+            gl = None;
+            cs = ccrs.PlateCarree()
 
-        if type(proj).__name__ != 'PlateCarree':
-            gl = ax.gridlines(crs=cs, linestyle='--', color="black")
+            if type(proj).__name__ != 'PlateCarree':
+                gl = ax.gridlines(crs=cs, linestyle='--', color="black")
 
-        else:
-            if (centralLon == True): 
-                locs = np.arange(extent[0], extent[1] , 20)
-                locs = np.append(locs, 179)
-                print(locs)
-                #ax.gridlines(crs=cs, color="black", xlocs=locs,
-                #     linewidth=0.5, linestyle='--', draw_labels=False)
-
-                locslabel = locs.copy()
-                locslabel[locs > 180] -= 360 
-
-                gl = ax.gridlines(color="black", linestyle="--", crs=cs, draw_labels=True)
-                gl.xlocator = mticker.FixedLocator(locslabel)
             else:
-                gl = ax.gridlines(crs=cs, color="black", draw_labels=True, linestyle='--')
+                if (centralLon == True): 
+                    locs = np.arange(extent[0], extent[1] , 20)
+                    locs = np.append(locs, 179)
+                    #ax.gridlines(crs=cs, color="black", xlocs=locs,
+                    #     linewidth=0.5, linestyle='--', draw_labels=False)
 
-        gl.xlabels_top=False
-        gl.xformatter = LONGITUDE_FORMATTER
-        gl.yformatter = LATITUDE_FORMATTER
-         
-        f_title = ""#plt_dict[m.field]['title']
-        #head = getHead(atime, vtime, tau, modelName, m['varname'], f_title)
-        head = getHead(atime, vtime, tau, "", "", f_title)
-        ax.set_title(head, loc='left')
+                    locslabel = locs.copy()
+                    locslabel[locs > 180] -= 360 
 
-        #cs2 = ax.imshow(vals, extent=extent)
-        #plt.rc('axes', titlesize=10)     # fontsize of the axes title
+                    gl = ax.gridlines(color="black", linestyle="--", crs=cs, draw_labels=True)
+                    gl.xlocator = mticker.FixedLocator(locslabel)
+                else: 
+                    gl = ax.gridlines(crs=cs, color="black", draw_labels=True, linestyle='--')
 
-        #DATA plots
-        #add Colorbars
-        addColorbars(fig, axes)
-        fig.savefig(plotout, dpi=dpi, bbox_inches="", transparent=False)
+            gl.xlabels_top=False
+            gl.xformatter = LONGITUDE_FORMATTER
+            gl.yformatter = LATITUDE_FORMATTER
+     
+    f_title = ""#plt_dict[m.field]['title']
+    #head = getHead(atime, vtime, tau, modelName, m['varname'], f_title)
+    head = getHead(atime, vtime, tau, "", "", f_title)
+    ax.set_title(head, loc='left')
 
-        for nk in ncfileDict.keys():
-            ncfileDict[nk].close()
+    #cs2 = ax.imshow(vals, extent=extent)
+    #plt.rc('axes', titlesize=10)     # fontsize of the axes title
 
-        axes = []
+    #DATA plots
+    #add Colorbars
+    addColorbars(fig, axes)
+    fig.savefig(plotout, dpi=dpi, bbox_inches="tight", transparent=False)
+
+    for nk in ncfileDict.keys():
+        try:
+           ncfileDict[nk].close()
+        except Exception as e:
+           pass
+
+    axes = []
 
 def addColorbars(fig, axes):
     
-    idx = 0.2 - (0.05 * len(axes))
-    for (nvar, cs) in axes:
-       cbaxes = fig.add_axes([0.2, idx, 0.7, 0.02]) 
-       cb = fig.colorbar(cs, cax=cbaxes, orientation="horizontal", shrink=0.5)
-       cb.ax.set_title(nvar, x=0.12 )
-       idx += 0.09
+   idx = 0.2 - (0.05 * len(axes))
+   idx = 1
+   for (nvar, cs) in axes:
+      cbaxes = plt.subplot2grid((100,1),(77 + idx,0), rowspan=2) # (add_axes([0.2, idx, 0.7, 0.02]) 
+      cb = fig.colorbar(cs, cax=cbaxes, orientation="horizontal")
+      cb.ax.set_title(nvar, x=.5 )
+      idx += 10#0.09
 
-    axes = []
+   axes = []
+
 def plotHist(fig,ax,vals, props):
     #vals = vals[~np.isnan(vals)]
     data_ax = plt.subplot2grid((6,1),(5,0))
@@ -455,6 +525,7 @@ def plotContour(fig, ax, vals, props, axes):
         lons = props['lons']
         lats = props['lats']
         levs = props['levs']
+        proj = props['proj']
         norm = props['norm']
         cmap = props['cmap']
         alpha = props['alpha']
@@ -465,14 +536,14 @@ def plotContour(fig, ax, vals, props, axes):
         if vals.size < 300000 :
             cs = ax.contourf(lons, lats, vals, alpha=alpha, levels=levs, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap)
         else:
-            cs = ax.contourf(lons, lats, vals, alpha=alpha, levels=levs, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap)
+            cs = ax.pcolormesh(lons, lats, vals, alpha=alpha, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap)
             #cs2 = ax.contourf(lons, lats, vals, levels=levs, norm=norm, cmap=cmap, transform=ccrs.PlateCarree())
 
         axes.append((props['nvar'], cs))
 
 def plotVector(m, fig, ax,props):
-    lons = props['lons']
-    lats = props['lats']
+    plons = props['lons']
+    plats = props['lats']
     norm = props['norm']
     cmap = props['cmap']
     proj = props['proj']
@@ -480,13 +551,10 @@ def plotVector(m, fig, ax,props):
     plotType = 'Streamlines'
 
     if props['nvar'] == 'wnd_spd':
-         xlim = ax.get_xlim()
-         xlim = abs(xlim[1] - xlim[0])
-         ylim = ax.get_ylim()
-         ylim = abs(ylim[1] - ylim[0])
+         xlim = np.max(plons) - np.min(plons)
+         ylim = np.max(plats) - np.min(plats)
          a =xlim * ylim
-         d= (1/(a * .00008)) 
-         d = d if d <= 5 else 5
+         d = a / (180 * 90) 
          print("Density: %s " % d)
         
          if 'plotType' in m['options']:
@@ -498,37 +566,39 @@ def plotVector(m, fig, ax,props):
              print("ploting wind ")
 
              props['nvar'] = 'wnd_ucmp_isobaric'
-             uvals  = getVals(m, props)
+             puvals  = getVals(m, props)
 
              props['nvar'] = 'wnd_vcmp_isobaric'
-             vvals  =  getVals(m, props)
+             pvvals  =  getVals(m, props)
 
              start_time = time.time()
 
-        
-             lonslice = slice(0,-1,int((33 - (d * 5))))
-             latslice = slice(0,-1,int((23 - (d * 4))))
-             print(lonslice, latslice)
-
-             #lslice = slice(0,-1,5)
-             #latslice = slice(0,-1,5)
-             lons = lons[lonslice]
-             lats = lats[latslice] 
-             uvals = uvals[latslice, lonslice] 
-             vvals = vvals[latslice, lonslice] 
-
+             lonslice = slice(0,-1,int(1 + (d * 20)))
+             latslice = slice(0,-1,int(1 + (d * 20)))
+             lons = plons[lonslice]
+             lats = plats[latslice] 
+             uvals = puvals[latslice, lonslice] 
+             vvals = pvvals[latslice, lonslice] 
              C = np.sqrt(uvals**2 + vvals**2)
 
-
              if plotType == 'Barbs':
+
                  ax.barbs( lons, lats, uvals, vvals, C, cmap=cmap,norm=norm, transform=proj)
 
              elif plotType == 'Quiver':
+
                  ax.quiver( lons, lats, uvals, vvals, C, edgecolors='black', linewidth=.5,  norm=norm, cmap=cmap, transform=proj)
 
              else:
-                 d = 1 + int(d)
-                 d = 2 if d > 2 else d
+                 d = 1 +  (abs(math.log(1/d))) 
+                 print("new d", d)
+                 lonslice = slice(0,-1,int(d ))
+                 latslice = slice(0,-1,int(d ))
+                 lons = plons[lonslice]
+                 lats = plats[latslice] 
+                 uvals = puvals[latslice, lonslice] 
+                 vvals = pvvals[latslice, lonslice] 
+
                  ax.streamplot( lons, lats, uvals, vvals, linewidth=1, density=d ,norm=norm, cmap=cmap, transform=proj)
 
              #histvals = np.square(np.add(np.power(uvals, 2), np.power(vvals, 2)))
@@ -619,7 +689,7 @@ def getLatest(model):
 
     for path in os.listdir(parentDir):
        for dtgpath in os.listdir(os.path.join(parentDir, path)):
-           dtg = re.search(model.timeRegex,dtgpath)
+           dtg = re.search(model['timeRegex'],dtgpath)
            res.append(dtg[1])
 
 
@@ -637,13 +707,14 @@ def  adjustForDateline(extent, proj, lons):
         extent[3] = 90
         extent[0] = -180
         extent[1] = 180
-    if extent[2] < -90:
+
+    elif extent[2] < -90:
         proj = ccrs.SouthPolarStereo(central_longitude=0)
         extent[0] = -180
         extent[1] = 180
         extent[2] = -90
 
-    if extent[0] < 180 and extent[1] > 180:
+    elif extent[0] < 180 and extent[1] > 180:
         centralLon = True
         proj = ccrs.PlateCarree(central_longitude=180)
         lons[lons < 0] = lons[lons< 0]+360

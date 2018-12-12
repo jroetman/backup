@@ -17,6 +17,7 @@ export class DataService {
                   productsUpdate : moment(),
                   searchView : "product",
                   regionTree : null,
+                  productSelection: {},
                   selectedProduct: null,
                   selectedProducts: [],
                   selectedProductUpdate:moment(), 
@@ -53,21 +54,20 @@ export class DataService {
   removeProduct(p){
       const prods = JSON.parse(JSON.stringify(this.messageSource.getValue().selectedProducts))
       prods.splice(prods.findIndex(pr => pr.name == p.name), 1)
-      this.changeMessage({selectedProducts: prods})
+      this.changeMessage({selectedProducts: prods, productSelection: {}})
 
   }
 
   addGalleryProduct(sp){
-      console.log("add gallery prod")
       const prods = JSON.parse(JSON.stringify(this.messageSource.getValue().selectedProducts))
-      const newMap = { name: "Map " + moment().format("YYYY-MM-DD HH:mm"), layers : []}
+      const newMap = { name: "Map " + moment().format("YYYY-MM-DD HH:mm:ss"), layers : []}
 
       if(sp) {
         newMap.layers.push(sp)
       }
 
       prods.push(newMap)
-      this.changeMessage({selectedProducts: prods, selectedProductUpdate : moment()})
+      this.changeMessage({productSelection: newMap, selectedProducts: prods, selectedProductUpdate : moment()})
 
   }
 

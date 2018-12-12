@@ -1,4 +1,9 @@
 id|name|alias|fieldtype|isDaily|path|foot|timeFormat|timeRegex
-1|ARP_JAXA_ptree|ARP_JAXA|obs|True|/shared/aerosol_sat/geo/l3/ahi/ARP_JAXA_ptree/030/dtg/daily|NOT OFFICIAL FNMON RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*
+1|ARP_JAXA_ptree|ARP_JAXA|obs|True|/DATA/cylc/products/ARP_JAXA_ptree/030/dtg/|NOT OFFICIAL FNMON RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*
 2|NAVGEM_05|NAVGEM|aod|False|/DATA/cylc/products/NAVGEM_05/dtg/|NOT OFFICIAL FNMOC RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*
-3|ENAAPS|ENAAPS|aod|False|/DATA/cylc/products/ENAAPS/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*
+3|ENAAPS|ENAAPS|aod|False|/DATA/cylc/products/ENAAPS/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|.*?_(\d+_\d+)_.*
+4|CAMS|CAMS|aod|False|/DATA/cylc/products/CAMS/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_aod_cams.nc$
+5|SILAM_AOD|SILAM|aod|False|/DATA/cylc/products/SILAM_AOD/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_silam_aod.nc$
+6|NGAC|NGAC|aod|False|/DATA/cylc/products/NGAC/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_aod_550_ngac.nc$
+7|NGACF|NGACF|aod|False|/DATA/cylc/products/NGACF/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_aod_550_ngacf.nc$
+8|COAMPS|COAMPS|coamps|True|/DATA/cylc/products/COAMPS/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_XXXXXXX_fcstfld.nc$

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from "../services/data.service";
+import { ProductService } from "../services/product.service";
 
 @Component({
   selector: 'app-searchbar',
@@ -11,18 +12,14 @@ export class SearchbarComponent implements OnInit {
 
   search: string;
 
-  constructor(private data: DataService) { }
+  constructor(private data: DataService, private prodSvc: ProductService) { }
  
-  onKey(event: any){
-    this.data.changeMessage({searchfilter: event.target.value});
+  updateProds(){
+    console.log(this.search)
+    this.prodSvc.getProducts(this.search)
+    #this.data.changeMessage({searchfilter: event.target.value});
   }
 
-  ngOnInit() {
-    this.data.currentMessage.subscribe(state => {
-       this.extent = state.extent
-       this.regionTree = state.regionTree
-       this.showProducts = state.showProducts
-    });
-  }
+  ngOnInit() { }
 
 }

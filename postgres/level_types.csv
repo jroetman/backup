@@ -43,3 +43,5 @@ id|ht_sfc|height above earth/sea surface
 42|251|flight_lvl|altitude above 18,000 ft in hft/100
 43|252|flight_lvl|layer below 18,000 ft in hft
 44|253|flight_lvl|layer above 18,000 ft in hft/1000*
+45|550|550mb|550mb
+46|700|satellite|satellite

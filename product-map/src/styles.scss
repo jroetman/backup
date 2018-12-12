@@ -11,7 +11,11 @@ body {
     color:#ccc;
     border:1px solid #aaa;
     border-radius:2px;
+    cursor:pointer;
 
+    &:hover{
+        box-shadow:0px 0px 3px 2px white;
+    }
 }
 
 .navlink {
