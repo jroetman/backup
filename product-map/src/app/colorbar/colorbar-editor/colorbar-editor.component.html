@@ -1,0 +1,70 @@
+<div class="editor"> 
+       <h3>
+          <div> Colorbar Editor  </div>
+       </h3>
+       <div class="name">
+           <h4> Name </h4> <input size="30" type="text" (change)="updateName()" [(ngModel)]="colorName" />
+       </div>
+
+       <div class="domainChoice">
+          <h4> Color / Domain </h4>
+          <div class="body">
+              <label>By Range</label> <input (change)="updateDomainType()" type="radio" value="domainRange"  name="domainType" [(ngModel)]="domainType">
+              <label>Per Color</label><input (change)="updateDomainType()" type="radio" value="specificDomain" name="domainType" [(ngModel)]="domainType">
+
+               <table class="colorTable" align="">
+                   <tr>
+                       <td *ngFor="let p of palette; let i = index"> 
+                           <button *ngIf="i > 0 && i < palette.length" class="addBtn" (click)="addColor(i)">+</button> 
+                       </td>
+                   </tr>
+                   <tr>
+                      <td> <button class="addBtnEnd" (click)="addColor(0)">+</button></td>
+                      <td class="pcolor" *ngFor="let p of palette; let i = index; trackBy:indexTrack"> 
+                         <input [(colorPicker)]="palette[i]" [style.background]="p" [cpOKButton]="true" (colorPickerSelect)="updatePalette()" /> 
+                         <!--label [style.background-color]="p">
+                             <input class='hidden' (change)="updatePalette($event, i)" type="color" value={{p}} />
+                         </label -->
+                      </td>
+                      <td> <button class="addBtnEnd" (click)="addColor(palette.length)">+</button> </td>
+                   </tr>
+                   <tr *ngIf="domainType=='domainRange'">
+                      <td> </td>
+                      <td class="domains" *ngFor="let p of palette; let i = index; trackBy:indexTrack"> 
+                       <input *ngIf="i==0" [(ngModel)]="domains[0]" (change)="updateDomains()" type="number" /> 
+                       <input *ngIf="i == palette.length - 1" [(ngModel)]="domains[1]" (change)="updateDomains()" type="number" /> 
+                      </td>
+                      <td></td>
+                   </tr>
+                   <tr *ngIf="domainType=='specificDomain'">
+                      <td> </td>
+                      <td  class="domains" *ngFor="let d of domains; let idx = index; trackBy:indexTrack" >
+                         <input (change)="updateDomains()" type="number" [(ngModel)]="domains[idx]" /> 
+                      </td>
+                      <td></td>
+                   </tr>
+                   <tr *ngIf="palette.length > 1" >
+                        <td> </td>
+                        <td  *ngFor="let p of palette; let i = index"> 
+                           <button class="removeBtn" (click)="removeColor(i)">-</button>
+                        </td>
+                   </tr>
+               </table>
+          </div>
+       </div>      
+
+       <div class="max">
+           <label> Max Color </label>
+           <input [(colorPicker)]="max" [style.background]="max" [cpOKButton]="true" (colorPickerSelect)="updatePalette()" /> 
+
+       </div>
+       <div class="saveBar"> 
+         <button class="resetBarBtn" (click)="reset()"> Reset </button>
+         <div class="save">
+            <button class="saveBarBtn" (click)="saveColorbar()"> Save Colorbar </button>
+            <button class="cancelBarBtn" (click)="cancel()"> Cancel </button>
+         <div>
+       </div>
+
+       </div>
+</div>

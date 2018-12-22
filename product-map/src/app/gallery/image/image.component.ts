@@ -62,10 +62,9 @@ export class ImageComponent implements OnInit, OnDestroy {
              
           });
           
-          this.imageLoading = true;
           
           
-          let newsrc = "http://docker.nrlmry.navy.mil:5000/icap/plotNetcdf?mapName=" + p.name + "&layers=" + JSON.stringify(layers) + "&extent=" + ext + "&hour=" + this.tau + "&dtg=" + (this.dtg.format("YYYYMMDD") + "00" + "&nocache=" + Date.now()) 
+          let newsrc = "http://docker.nrlmry.navy.mil:5000/icap/plotNetcdf?mapName=" + p.name + "&layers=" + JSON.stringify(layers) + "&extent=" + ext + "&hour=" + this.tau + "&dtg=" + (this.dtg.format("YYYYMMDD") + "00" + "&nocache=" + Date.now() 
 
           this.src = newsrc;
 
@@ -76,6 +75,7 @@ export class ImageComponent implements OnInit, OnDestroy {
                  let iscomplete = true;
                  if(pe != null) iscomplete = pe.complete;
 
+                 this.imageLoading = true;
                  if(iscomplete) {
                     clearInterval(this.checkLoad)
                     if(this.imageLoading != false) this.imageLoading = false;

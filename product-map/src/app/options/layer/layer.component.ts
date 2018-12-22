@@ -23,6 +23,7 @@ export class LayerComponent implements OnInit {
 
   constructor(private data: DataService) { }
 
+
   removeLayer(){
        const prods = JSON.parse(JSON.stringify(this.selectedProducts))
        const map = prods.find(p => p.name == this.parent_guid);
@@ -64,7 +65,6 @@ export class LayerComponent implements OnInit {
   }
 
 
-
   showHide(){
       const prods = JSON.parse(JSON.stringify(this.selectedProducts))
       const map = prods.find(p => p.name == this.parent_guid);
@@ -88,10 +88,11 @@ export class LayerComponent implements OnInit {
       layer.options.level = lvl.level
       layer.options.level_id = lvl.plid
 
-      this.data.changeMessage({selectedProducts : prods});
+      this.data.changeMessage({selectedProducts : prods, selectedProductUpdate: moment()});
   }
 
   ngOnInit() {
+      console.log("layer init")
       const layer = this.layer
       this.level_id = layer.options.level_id ? layer.options.level_id : layer.field.levels[0].plid;
       this.alpha    = layer.options.alpha    ? layer.options.alpha  : 100;
@@ -108,6 +109,21 @@ export class LayerComponent implements OnInit {
 
           if (!layer.options[optName]) {
               this.extras[optName] = defaultVal; 
+
+          } else {
+              this.extras[optName] = layer.options[optName];
+
+          }
+
+      } else {
+          const optName = "Contour Type"
+          this.field_options = [{"name" : optName,
+                                 "type" : "radio",
+                              "options" : [{"name" : "Filled"}, {"name" : "Unfilled"}]
+                               }]
+
+          if (!layer.options[optName]){
+              this.extras[optName] = "Filled"
 
           } else {
               this.extras[optName] = layer.options[optName];

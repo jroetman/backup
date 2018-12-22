@@ -1,20 +1,20 @@
 from models.imports import *
 from multiprocessing import Pool
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
-import glob, math, re, hashlib,time, threading, traceback
+import glob, math, re, hashlib,time, traceback
 import matplotlib.colors as colors
 import matplotlib.ticker as mticker
 import models.ColorUtils as ColorUtils
 from collections import OrderedDict
 from netCDF4 import  num2date
 import models.QueryUtils as QueryUtils
-import math
+import math, base64
+import uwsgi
+
 
 plot_dir = "/plots"
 plot_out_dir = ""
 dpi = 96 
-
-threadDict = {}
 ncfileDict = {}
 
 def getMidpoint(lon1,lon2,lat1,lat2):
@@ -24,6 +24,19 @@ def getMidpoint(lon1,lon2,lat1,lat2):
                    math.sqrt( (math.cos(lat1)+Bx)*(math.cos(lat1)+Bx) + By*By ) );
     lonMid = lon1 + math.atan2(By, math.cos(lat1) + Bx);
     return lonMid
+
+def getOptsStr(layers):
+    m = hashlib.md5()
+ 
+    for l in layers: 
+        opts = l['options']
+        optsStr = opts['level'] +  \
+                  str(opts['alpha'] if 'alpa' in opts else 1) + \
+                  opts['Contour Type'] if 'Contour Type' in opts else 'filled'
+
+        m.update(base64.b64encode(bytes(optsStr, 'utf-8')))
+    return m.digest()
+
 
 def getFoot(dtg, model):
     return 'Plots Generated ' + getDisplayDate(dtg) + ' NRL/Monterey'
@@ -126,7 +139,6 @@ def getImagePath(filepath, model, dtg, var):
                    'url'  : 'http://docker.nrlmry.navy.mil:5000/icap/plotNetcdf?model=%s&var=%s&dtg=%s' %                   (model['name'],var, model['dtg'] )}]
         
         ncfile.close()
-        print(res)
     
     except Exception as e:
         logging.exception("ncfile not found for %s %s" % (model['name'], model['dtg']))
@@ -227,12 +239,12 @@ def getLatLons(m, imagePaths):
     lons  = variables["lon"][:] if 'lon' in variables else variables["longitude"][:]
     roll = None
     
+    #If we're not going to -180, then this is a 0-360 grid
     if np.min(lons) == 0:
-        roll = 360
+        roll = 360 
         lons = lons[:]-179.5
 
     ncfile.close()
-
     return {'lats': lats, 'lons': lons, 'roll' : roll }
 
 
@@ -259,7 +271,6 @@ def getvtime(atime,  tau):
 
 
 def getVals(model, props):
-
     vals = None;
     nvar = props['nvar'];
     variables = props['vars']
@@ -314,6 +325,7 @@ def getVals(model, props):
         if props['roll'] is not None:
             print("rolling vals due to adjusting from 360 to 180")
             vals = np.roll(vals, props['roll'])
+            
 
         #default to first index of nothing selected
         #if 'units' in model:
@@ -327,11 +339,10 @@ def getVals(model, props):
 
         #shift if grid is not -180 to 180 by roll amount. 360 is typical 
         if extent[0] < 180 and extent[1] > 180:
-           print("rolling vals for dateline")
-           vals = np.roll(vals,int(len(lons)/2),1)
+           print("rolling vals for dateline", int(len(lons)/2))
+           vals = np.roll(vals,int(props['lonsCount']/2),1)
 
         vals = vals[llat:ulat, llon:ulon]
-        print("returning vals")
         
     return vals
 
@@ -346,8 +357,9 @@ def genLevelCmap(domains, palette):
     if len(levs) == 2:
         diff = abs(levs[-1] - levs[0]) 
         levs = np.arange(levs[0], levs[-1], diff * .10)
-        cmap = colors.LinearSegmentedColormap.from_list('cmap', palette, N=len(levs))
+        cmap = colors.LinearSegmentedColormap.from_list('cmap', palette, N=100)
 
+    print(levs)
     return levs, cmap
 
 def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
@@ -372,7 +384,6 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                 #add dataset to dict, so we can close later
                 npath             = layerModel['ncfile']
                 
-                print("LAYERM",layerModel, npath)
                 ncfileDict[npath] = Dataset(npath, "r")
                 nvar = l['field']['varname']
 
@@ -381,6 +392,7 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                 ll  = getLatLons(layerModel, imagePaths)
                 lats = ll['lats'][:]
                 lons = ll['lons'][:]
+                lonsCount = len(lons)
                 roll = ll['roll']
 
                 extent, proj, centralLon, lons = adjustForDateline(extent, proj, lons)
@@ -400,17 +412,22 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                 levs, cmap = genLevelCmap(layerModel['domains'], layerModel['palette'])
                 norm   = colors.BoundaryNorm(levs, cmap.N) #BoundaryNorm(levs, cmap.N)
                  
-                print(layerModel['options'])
                 if 'color' in layerModel['options']: 
                     if 'type' in layerModel['options']['color']:
                       ntype = layerModel['options']['color']['type']
                       if ntype.lower() == "log": 
                           norm = colors.SymLogNorm(vmin=levs[0], vmax=levs[-1], linthresh=0.1)
 
+                #option for a filled contour
+                cfill = 'filled' 
+                if 'Contour Type' in layerModel['options']: 
+                 cfill = layerModel['options']['Contour Type']
+
                 lprops = {
                   'alpha'   : 1,
                   'levs'    :levs ,
                   'roll'    : roll,
+                  'cfill'   : cfill,
                   'extent'  : extent,
                   'proj'    : proj,  
                   'centralLon' : centralLon,
@@ -421,6 +438,7 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                   'times'   : times,
                   'vars' :  ncfileDict[npath].variables,
                   'lons' : lons,
+                  'lonsCount' : lonsCount,
                   'lats' : lats,
                   'llonidx' : llonidx, 
                   'llatidx' : llatidx,
@@ -437,7 +455,6 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
                     plotVector(l, fig, ax, lprops) 
 
                 else:
-                    print("plot layer")
                     vals = getVals(layerModel, lprops)
                     plotContour(fig, ax, vals, lprops, axes)
 
@@ -488,6 +505,7 @@ def plotWorker(plotout, fig, dtg, layers, extent,times, tau, atime, vtime=""):
     #DATA plots
     #add Colorbars
     addColorbars(fig, axes)
+    print("finished plot: %s %s %s" % (f_title, atime, tau))
     fig.savefig(plotout, dpi=dpi, bbox_inches="tight", transparent=False)
 
     for nk in ncfileDict.keys():
@@ -503,8 +521,10 @@ def addColorbars(fig, axes):
    idx = 0.2 - (0.05 * len(axes))
    idx = 1
    for (nvar, cs) in axes:
+      print(idx)
       cbaxes = plt.subplot2grid((100,1),(77 + idx,0), rowspan=2) # (add_axes([0.2, idx, 0.7, 0.02]) 
       cb = fig.colorbar(cs, cax=cbaxes, orientation="horizontal")
+      cb.ax.minorticks_on()
       cb.ax.set_title(nvar, x=.5 )
       idx += 10#0.09
 
@@ -528,13 +548,25 @@ def plotContour(fig, ax, vals, props, axes):
         proj = props['proj']
         norm = props['norm']
         cmap = props['cmap']
+        cfill = props['cfill']
         alpha = props['alpha']
         
         vals[vals == 0] = 'nan'
         alpha = 1 if alpha is None else alpha;
         cs = None;
+       
+
+        #cmap.set_over(color='white')
+        vals = np.nan_to_num(vals)
+
+        print(vals)
         if vals.size < 300000 :
-            cs = ax.contourf(lons, lats, vals, alpha=alpha, levels=levs, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap)
+            if cfill.lower() == 'filled' or cfill is None:
+                cs = ax.contourf(lons, lats, vals, alpha=alpha, levels=levs, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap, extend='max')
+            else:
+                cs = ax.contour(lons, lats, vals, alpha=alpha, levels=levs, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap)
+                ax.clabel(cs)
+              
         else:
             cs = ax.pcolormesh(lons, lats, vals, alpha=alpha, norm=norm, transform=ccrs.PlateCarree(), cmap=cmap)
             #cs2 = ax.contourf(lons, lats, vals, levels=levs, norm=norm, cmap=cmap, transform=ccrs.PlateCarree())
@@ -613,68 +645,62 @@ def plot(plotout, layers, dtg, atime, tau, times, extent):
     cm = getMidpoint(extent[0],extent[1],extent[2], extent[3] )
     vtime    = getvtime(atime, tau)
 
-    fig = plt.figure(figsize=(10, 7))
+    fig = plt.figure(figsize=(12, 9))
     plotWorker(plotout, fig, dtg,  layers, extent,times, tau,atime, vtime)
     plt.close()
     
 
-def plotThread(plot_out_dir, models, varlist, atime, times, extent, threadName, modellist):
-    print("Starting Thread")
-    mhash = ""
-    for m in models:
-        mhash += m.getHash()
-    mhash = hashlib.md5(mhash.encode()).hexdigest() 
+def netcdfPlotC(props): 
+   #check to see if we're no longer needed
 
-    for idx, tau in enumerate(times):
-        requestedTime = getvtime(atime, tau)
-        plotout = "%s/%s_%s_%s_%s_%s.jpg" % \
-                  (plot_out_dir, datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(requestedTime, "%Y%m%d%H"), ("-").join(varlist), "_".join(modellist), mhash) 
-        print("thread plot %s" % plotout)
-        if not os.path.exists(plotout): 
-            print("plotting: %s" % tau)
-            plot(plotout, models, atime,  tau, times, extent)
-
-    print("Done")
-    del threadDict[threadName]
+   netcdfPlot(*props)
 
 def netcdfPlot(layers, dtg, extent, hour, withMap, width, height, region, mapName=None):
 
-    plot_out_dir = makePlotDir(extent, dtg)
+    extent = extent.split(",")
+    extent = list(map(lambda e : round(float(e), 2), extent))
+    strExtent = list(map(lambda e : str(round(float(e))), extent))
+    plotExt = ",".join(strExtent)
+    oe = [extent[0], extent[2], extent[3] , extent[1]]
+
+    plot_out_dir = makePlotDir(plotExt, dtg)
     atime   = datetime.strptime(dtg,"%Y%m%d%H")
     #varlist = layers['varname']
     mapName = mapName if mapName is not None else "" 
+    layerNames = "".join(list(map(lambda l: l['model'] + l['field']['varname'] , layers)))
+
+    #create hash to detect changes in optoins
+    optionsStr = getOptsStr(layers)
     times = np.arange(0,120,6)
 
-    extent = extent.split(",")
-    extent = list(map(lambda e : round(float(e), 2), extent))
-    oe = [extent[0], extent[2], extent[3] , extent[1]]
+    requestedTime = getvtime(atime, hour)
+    filename = "%s_%s_%s_%s.jpg" % \
+      (datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(requestedTime, "%Y%m%d%H"), layerNames, optionsStr)
+
+    plotout = plot_out_dir + "/" + filename
+
+    #used to find previous plots if options chnage
+    oldPlotsPattern = "%s_%s_%s_.*" % \
+      (datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(requestedTime, "%Y%m%d%H"), layerNames)
+      #(plot_out_dir, datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(requestedTime, "%Y%m%d%H"), ("-").join(varlist))
 
     try:
-        requestedTime = getvtime(atime, hour)
-        plotout = "%s/%s_%s.jpg" % \
-                  (plot_out_dir, datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(requestedTime, "%Y%m%d%H"))
-                  #(plot_out_dir, datetime.strftime(atime,"%Y%m%d%H" ), datetime.strftime(requestedTime, "%Y%m%d%H"), ("-").join(varlist))
+        #remove old plots
+        for f in os.listdir(plot_out_dir):
+          if re.search(oldPlotsPattern, f):
+              fsplit = f.split("_")
+              if fsplit[len(fsplit) - 1] != str(optionsStr) + ".jpg":
+                  print("REMOVING Plot: %s " % f)
+                  os.remove(os.path.join(plot_out_dir, f))
 
-        #threadName = dtg + "_".join(varlist) + "_".join(model['name'])
-        threadName = dtg +  "_" + mapName
-
-        if True: #not os.path.exists(plotout) and threadName not in threadDict:
-            print("NEW PLOT")
+        if(os.path.exists(plotout)):
             plot(plotout, layers, dtg, atime, hour, times, oe)
+            #return plotout
 
-         #   threadDict[threadName] = True
-         #   pt = threading.Thread(target=plotThread, args=(plot_out_dir, models, varlist, atime, times, oe, threadName, modellist))
-         #   pt.daemon = True
-         #   pt.start()
         else:
-            tries = 100
-            while not os.path.exists(plotout) and tries > 0: 
-                print("waiting")
-                time.sleep(1)
-                tries -= 1
+            print("NEW PLOT ", plotout)
+            plot(plotout, layers, dtg, atime, hour, times, oe)
                 
-        return plotout
-
     except Exception as e:
         print(traceback.format_exc())
         logging.exception("Failed to plot")
@@ -708,16 +734,19 @@ def  adjustForDateline(extent, proj, lons):
         extent[0] = -180
         extent[1] = 180
 
-    elif extent[2] < -90:
+    if extent[2] < -90:
         proj = ccrs.SouthPolarStereo(central_longitude=0)
         extent[0] = -180
         extent[1] = 180
         extent[2] = -90
 
-    elif extent[0] < 180 and extent[1] > 180:
+    if extent[0] < 180 and extent[1] > 180:
         centralLon = True
         proj = ccrs.PlateCarree(central_longitude=180)
         lons[lons < 0] = lons[lons< 0]+360
         lons = np.roll(lons, int(len(lons) /2))
 
     return (extent, proj, centralLon, lons)
+
+def savePlot(props):
+   print("save plot")

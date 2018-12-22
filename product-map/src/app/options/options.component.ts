@@ -71,6 +71,11 @@ export class OptionsComponent implements OnInit {
     evnt.dataTransfer.effectAllowed = "copy";
   }
 
+  trackFn(idx, val){
+    console.log(val.guid + val.options.level)
+    return val.guid + val.options.level
+  }
+
   ngOnInit() {
       this.guid = this.map.name;
 

@@ -1,0 +1,124 @@
+.editor {
+    border: 1px solid #aaa;
+    padding:5px;
+    div {margin:3px;border-top:1px solid #333;}
+
+    h3 {
+       display:flex;
+       justify-content:space-between;
+    }
+
+   .domains {
+     input {width:50px; }
+    }
+
+    .domainChoice {
+       .body {padding-left:5px;}
+    }
+
+    .name { 
+         background:#333;
+         display:flex;
+         input {margin-left:10px;}
+     }
+
+     h4 {margin:2px; margin-left:0px};
+
+     .colorTable {
+       margin-top:5px;
+       tr { text-align:center}
+    
+     }
+     .max{
+        background:#333;
+        input { width:50px;}
+     }
+
+    .saveBar {
+       text-align:left;
+       padding:5px;
+       margin:5px;
+       border:1px solid #aaa;
+       border-radius:5px;
+       background:#444;
+    
+       .save { position:relative; float:right;}
+      .resetBarBtn {
+          background: #333;
+          color:#fff;
+          border: 2px solid #aaa;
+          box-shadow:0px 0px 2px white ;
+          &:hover{
+            box-shadow:0px 0px 10px #00a;
+          }
+          
+      }
+    
+      .cancelBarBtn {
+          background: #333;
+          color:#fff;
+          border: 2px solid #700;
+          box-shadow:0px 0px 25px white ;
+          &:hover{
+            box-shadow:0px 0px 30px red;
+          }
+          
+      }
+      
+      .saveBarBtn {
+          background: #333;
+          color:#fff;
+          border: 2px solid #070;
+          box-shadow:0px 0px 25px white ;
+          &:hover{
+            box-shadow:0px 0px 30px green;
+          }
+          
+      }
+    }
+    .addBtnEnd{
+       border:1px solid #454;;
+       border-radius:5px;
+       background:#252;
+       font-size: 15px;
+       color: #0E0;
+       &:hover{
+          border:1px solid white;
+          box-shadow:0px 0px 15px white;
+       }
+    }
+    
+    .removeBtn {
+        margin-left:auto;
+        border:1px solid #544;;
+        border-radius:5px;
+        background:#522;
+        font-size: 15px;
+        color: red;
+        &:hover{
+           border:1px solid white;
+           box-shadow:0px 0px 15px white;
+        }
+    }
+    
+     
+    .addBtn {
+        position:relative;
+        float:right;
+        left: 15px;
+        border:2px solid #111;;
+        border-radius:5px;
+        background:#252;
+        font-size: 15px;
+        color: #0E0;
+        &:hover{
+           border:1px solid white;
+           box-shadow:0px 0px 15px white;
+        }
+    }
+
+    .pcolor{
+        input { width:50px;}
+    }
+
+}

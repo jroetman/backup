@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { DataService } from "./services/data.service";
 import { ColorbarService} from "./services/colorbar.service";
 import { ProductService } from "./services/product.service";
@@ -13,26 +13,38 @@ import { SESSION_STORAGE, StorageService } from 'angular-webstorage-service';
 
 export class AppComponent implements OnInit {
 
-  constructor(private prodSvc: ProductService, private colors: ColorbarService, private data: DataService, @Inject(SESSION_STORAGE) private storage: StorageService){}
+  constructor(private prodSvc: ProductService, private colors: ColorbarService, private data: DataService, @Inject(SESSION_STORAGE) private storage: StorageService, private cdr: ChangeDetectorRef){
 
+  }
 
   ngOnInit() {
+    if(TogetherJS) {
+         TogetherJS.hub.on("stateChange", (msg) => {
+               console.log("State change")
+               msg.message.clientId = msg.clientId
+               this.data.changeMessageTogether(msg.message)
+               this.cdr.markForCheck()
+               
+         });
+     }
 
     const state = this.storage.get("nrlmaproom") 
     this.prodSvc.getProducts();
 
 
     if(state) {
-       //this.data.changeMessage(JSON.parse(state))
+       this.data.changeMessage(JSON.parse(state))
     }
     const colors = this.colors.getColors(); 
     this.data.changeMessage({colors: colors})
 
     this.data.currentMessage.subscribe(state => {
+       
        this.showGallery = state.showGallery;
        this.showProducts = state.showProducts;
        this.selectedProducts = state.selectedProducts;
        this.showInstructions = state.showInstructions;
+
     });
   }
 

@@ -31,16 +31,17 @@
         <div class="extra" *ngFor="let o of field_options">
             <h5> Plot Options </h5>
             <div *ngIf="o.type == 'radio'" class="optGroup">
+                 <label> {{o.name}}</label>
                  <div *ngFor="let opt of o.options"> 
-                     <label> {{opt.name}} </label>
                      <input (change)="updateExtra(o.name)" type="radio" name="{{o.name}}"  value="{{opt.name}}" [(ngModel)]="extras[o.name]">
+                     <label> {{opt.name}} </label>
                  </div>
             </div>
         </div>
          <!-- NOTE: isLayer and parent_guid are set when field are dragged to this layer -->
          <h5> Colors </h5>
          <div class="comp">
-           <app-colorbar [parent_guid]="parent_guid" [layer]="layer" [level_id]="level_id" > </app-colorbar>
+           <app-colorbar [parent_guid]="parent_guid" [layer]="layer" > </app-colorbar>
          </div>
     </div>
 </div>

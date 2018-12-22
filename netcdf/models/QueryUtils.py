@@ -4,7 +4,13 @@ import psycopg2.extras
 import traceback
 from flask import jsonify
 
-conn = psycopg2.connect("host=db dbname=aerosol user=postgres")
+conn = None
+def getConn():
+    global conn 
+    if (conn is None or conn.closed > 0):
+        conn = psycopg2.connect("host=db dbname=aerosol user=postgres")
+
+    return conn
 
 def getModelInstance(modelName, dtg, varname=None, level=None):
     #if defined in lib meta with a path, then we can use the existing model classes
@@ -15,7 +21,7 @@ def getModelInstance(modelName, dtg, varname=None, level=None):
     path = ""
 
     try:
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur = getConn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
         query = """
         SELECT p.path,p.name,p.alias, p.time_regex, p.time_format, pf.alias field_alias, pf.varname,
                cs.name color_name, cs.id color_id, cs.domains,
@@ -74,7 +80,7 @@ def getModelInstance(modelName, dtg, varname=None, level=None):
     return res
 
 def getColors(): 
-  cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+  cur = getConn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
   cur.execute( """
    SELECT cs.*
      FROM products_colorscale cs
@@ -82,7 +88,7 @@ def getColors():
 
   res = cur.fetchall()
   cur.close()
-  return jsonify(res)
+  return {'colors' : res}
 
 def getProducts(filterStr=None, filterType=None): 
 
@@ -90,7 +96,7 @@ def getProducts(filterStr=None, filterType=None):
   if filterStr is not None:
     pfilter = "AND varname like '%%" + filterStr.lower() + "%%' "
 
-  cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+  cur = getConn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
   query = """
     SELECT p.id, p.name, p.alias, json_agg(sub) fields
       FROM products_product p,
@@ -133,29 +139,87 @@ def getProductFile(dir_out, dtg):
 
     return (dir_out +  ncfile);
 
-def updateColor(colorId, domains=None, palette=None):
-  cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+def removeColorbar(cid):
+  cur = getConn().cursor()
+  try:
+      query = """
+              DELETE FROM products_colorscale
+               WHERE id = %s;
+            """
+      cur.execute(query, (cid,))
+      getConn().commit()
 
-  query = "UPDATE products_colorscale SET"
-  if domains is not None:
-     domains = ",".join(domains)
-     query += " domains = '%s', " % domains
-
-  if palette is not None:
-     palette  = ",".join(palette)
-     query += " palette = '%s' " % palette 
-  
- # print(query)
-  query += " WHERE id = %s" % colorId
- # print(query)
-  cur.execute(query)
+  except Exception as e:
+    print(e) 
+    pass
 
   cur.close()
 
+def assignColorbar(cid, plid):
+  cur = getConn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+  try:
+      query = """
+                UPDATE products_level
+                  SET color_scale_id = %s
+                WHERE id = %s
+              """
+
+     # print(query)
+      cur.execute(query, (cid, plid))
+  except Exception as e:
+    print(e) 
+    pass
+
+  cur.close()
+
+def updateColor(colorId, name, domains=None, palette=None, maxc=None):
+  cur = getConn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+  cid = -1
+  try:
+
+      query = """
+                UPDATE products_colorscale
+                  SET domains = %s,
+                      palette = %s,
+                      name = %s
+                  WHERE id = %s;
+              """
+
+      if 'new' in str(colorId):
+          query = "INSERT into products_colorscale(id, name,  domains, palette) values (DEFAULT, %s, %s, %s) RETURNING id;"
+
+      domains = ",".join(domains)
+      palette  = ",".join(palette)
+
+     # print(query)
+      
+      if 'new' in str(colorId):
+          cur.execute(query, (name, domains, palette))
+          cid = cur.fetchone()['id']
+
+      else:
+          cur.execute(query, (domains, palette, name, colorId))
+
+      print(query)
+      print(name,domains,palette)
+  except Exception as e:
+    print(e) 
+    print(traceback.format_exc())
+    pass
+
+  cur.close()
+  return cid 
+
 def saveMap(mapId, props):
-  cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-  query = "INSERT into products_maps(mapId, props) value(%s,%s) ON CONFLICT DO UPDATE"
-  #print(query, mapId, props)
-  cur.execute(query)
+  cur = getConn().cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+  try:
+      query = "INSERT into products_maps(mapId, props) value(%s,%s) ON CONFLICT DO UPDATE"
+      #print(query, mapId, props)
+      cur.execute(query)
+         # cid = cur.fetchone()[0]
+  except Exception as e:
+    print(e) 
+    pass
+
   cur.close()
 

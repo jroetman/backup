@@ -6,9 +6,15 @@ import models.PlotUtils as PlotUtils
 import models.QueryUtils as  QueryUtils
 from flask import Flask, jsonify, send_file, request, g
 from flask_cors import CORS
+from uwsgidecorators import *
 
+from multiprocessing import Pool
+import threading
+
+pool  = Pool(3)
 
 app = Flask(__name__)
+app.config['PROPAGATE_EXCEPTIONS'] = True
 CORS(app)
 
 @app.teardown_appcontext
@@ -49,12 +55,43 @@ def plotNetcdf(*args):
     #nm = QueryUtils.getModelInstance(model['model'], dtg, varname=field, level=options["level_id"])
     #nm['options'] = options
 
+    print("DTG", dtg)
+    args = (layers, dtg,  extent, hour, withMap, width, height, region, mapName) 
+    mapOpts  = PlotUtils.getOptsStr(layers) 
+    cacheOpts = uwsgi.cache_get(mapName)
+
+    #print("mapOpts %s ==? cacheOpts %s" % (mapOpts, cacheOpts))
+    #if cacheOpts != mapOpts:
+    #    uwsgi.cache_set(mapName, mapOpts)
+    #    uwsgi.cache_set(mapName + "Plot", "True")
+    #    plotThread(args)
+
+    #else:
+    #    uwsgi.cache_set(mapName + "Plot", "False")
+
     filepath = PlotUtils.netcdfPlot(layers, dtg,  extent, hour, withMap, width, height, region, mapName)
+
     if(os.path.exists(filepath)):
         return send_file(filepath, mimetype='image/gif')
+
     else:
         return filepath
 
+@thread
+def plotThread(args):
+    print("THREAD")
+    pool.map(PlotUtils.netcdfPlotC, cache(*args))
+
+#cache the rest of the weeks taus
+def cache(layers, dtg,  extent, hour, withMap, width, height, region, mapName):
+   for i in range(0, 20):
+     h = i * 6
+     plotStatus = str(uwsgi.cache_get(mapName + "Plot"))
+     print("uwsgi: " ,  plotStatus)
+     if plotStatus == "False":
+        sys.exit()
+
+     yield [layers, dtg,  extent, h, withMap, width, height, region, mapName]
 
 @app.route('/latest')
 def getLatest(*args):
@@ -115,7 +152,7 @@ def discover(*args):
 
 @app.route('/icap/getColors')
 def getColors(): 
-    return QueryUtils.getColors()
+    return jsonify(QueryUtils.getColors())
 
 @app.route('/icap/getProducts')
 def getProducts(): 
@@ -131,15 +168,39 @@ def saveMap():
   QueryUtils.saveMap(mapId, props)
   return "Saved"
 
+@app.route('/icap/removeColorbar', methods=['POST'])
+def removeColorbar(): 
+  json = request.get_json()
+  cid  = json.get('cid')
+  print(cid)
+  QueryUtils.removeColorbar(cid)
+  return jsonify(QueryUtils.getColors())
+
+@app.route('/icap/assignColorbar', methods=['POST'])
+def assignColorbar(): 
+  json = request.get_json()
+  cid  = json.get('cid')
+  plid = json.get('plid')
+  print(cid, plid)
+  QueryUtils.assignColorbar(cid, plid)
+
+  print(cid, plid)
+  return jsonify(QueryUtils.getColors())
+
 
 @app.route('/icap/updateColor', methods=['POST'])
 def updateColor(): 
   json = request.get_json()
   colorId  = json.get('colorId')
+  name    = json.get('name')
   domains = json.get('domains')
   palette  = json.get('palette')
-  QueryUtils.updateColor(colorId, domains, palette)
-  return QueryUtils.getColors()
+  maxc     = json.get('max')
+  cid =  QueryUtils.updateColor(colorId, name, domains, palette, maxc)
+  json = QueryUtils.getColors()
+  json['cid'] = cid 
+  return jsonify(json)
+  
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000, debug=True)

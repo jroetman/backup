@@ -54,3 +54,13 @@ AOT_L2_Num|OT_L2_Num|1||46
 AE_L2_Mean|E_L2_Mean|1||46
 AE_L2_SDV|E_L2_SDV|1||46
 AE_L2_Num|E_L2_Num|1||46
+tot_dust_concen_surface|tot_dust_concen_surface|9||1
+aero_concen_sa|aero_concen_sa|9||1
+aero_concen_sm|aero_concen_sm|9||1
+aero_concen_su|aero_concen_su|9||1
+aero_optdep_surface|aero_optdep_surface|9||1
+aero_optdep_du_surface|aero_optdep_du_surface|9||1
+aero_optdep_sa_surface|aero_optdep_sa_surface|9||1
+aero_optdep_sm_surface|aero_optdep_sm_surface|9||1
+aero_optdep_su_surface|aero_optdep_su_surface|9||1
+aero_vis_rng_surface|aero_vis_rng_surface|9||1

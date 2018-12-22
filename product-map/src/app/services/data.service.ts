@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
 import ColorbarService from './colorbar.service'
@@ -29,10 +29,32 @@ export class DataService {
   private messageSource = new BehaviorSubject(this.defaultState);
   currentMessage = this.messageSource.asObservable();
 
-  constructor(@Inject(SESSION_STORAGE) private storage: StorageService){}
+
+  constructor(@Inject(SESSION_STORAGE) private storage: StorageService){
+  }
 
   async changeMessage(message: any) {
 
+    let prevMessage = this.messageSource.getValue()
+    let m =Object.assign({}, prevMessage, message);
+     
+    if (message.selectedProducts) m.selectedProductUpdate = moment();
+    if (message.products) m.productsUpdate = moment();
+
+    this.messageSource.next(m)
+    this.storage.set("nrlmaproom", JSON.stringify(m)) 
+    console.log("NEW STATE")
+    console.log(m)
+
+    if(TogetherJS && TogetherJS.require){
+       if (this.session ==  null) this.session = TogetherJS.require("session");
+       TogetherJS.send({type: "stateChange", message:m, TogetherJS})
+    }
+  
+  }
+
+
+  async changeMessageTogether(message: any) {
     let prevMessage = this.messageSource.getValue()
     let m =Object.assign({}, prevMessage, message);
      
@@ -71,14 +93,14 @@ export class DataService {
 
   }
 
-  redrawProduct(guid){
+  redrawProduct(map){
       const prods = JSON.parse(JSON.stringify(this.messageSource.getValue().selectedProducts))
-      let p = prods.find(pr => pr.guid == guid)
+      let p = prods.find(pr => pr.name == map.name)
 
       //update: Date.now() forces gallery to re-render image. update could be called anything else 
-      p.options.update = Date.now()
+      p.layersUpdated = moment()
       
-      this.changeMessage({selectedProducts: prods})
+      this.changeMessage({selectedProducts: prods, selectedProductUpdate : moment()})
 
   }
 

@@ -9,26 +9,12 @@
     display: flex;
     flex-direction:column;
    .group {justify-content:space-between; display:flex;}
-
     label {display:block;}
-    input[type="color" i] {height:18px; width:20px;}
-    
-   .nocolor {
-        opacity:0.1;
-        &:hover{
-           box-shadow:0px 0px 5px white ;
-           opacity:1;
-         }
-     }
 
-     .tcdiv { margin:0px;
-              padding:0px; 
-              margin-bottom:2px;
-              text-align:right; 
-             }
 }
 
 .colorEdit {
+   
      position:absolute;
      float:left;
      border-radius:5px;
@@ -39,73 +25,63 @@
      z-index:1000;
      min-width:300px;
 
-     .select { 
-           label {padding-right:10px;}
-           display:flex
+     .save {
+         margin:5px;
+         padding:5px;
+         border:1px solid #ccc;
+   
+         .enabled {
+               background:#444;
+               box-shadow:0px 0px 15px 5px white;
+          }
+         .createNew {
+           float:right; 
+         }
+
       }
-
-     .domains {
-       display:flex;
-       flex-direction:column;
-       margin-bottom:5px;
-       h4 {margin:1px;padding:1px;}
-
-       div {
-            margin-left:5px;
-            display:flex;
-            justify-content:flex-start;
-            flex-wrap:wrap;
-       } 
-       div input {width:70px; }
+     .cancelBtn {
+        &:hover{
+           box-shadow:0px 0px 30px red;
+        }
      }
 
-}
+     .select {  
+           margin-left:10px;
+           height:300px;
+           overflow-y:auto;
+           label {padding-right:10px;}
+           
+           .selectColor {
+               display:grid;
+               grid-template-columns:5% 45% 35% 15%;
+               &.even {
+                   background:#333;
+                   &.selected {
+                        background:#aaa;
+                    }
+               }
+               .palette {
+                  display:flex;
+                  align-items:center;
+                  div {
+                    width:15px; height:15px;
+                  }
+                } 
+               
+           }
+           .actions {
+              .edit {border-radius:3px; border:1px solid white; color:white; background:#222;}
+              .delete {background:#222;border-radius:3px; color: red; border:1px solid white;}
 
-.pcolor{
-    input { width:25px;}
-}
+            }
+           .selected {
+                background:#aaa;
+            }
 
-
-.addBtnEnd{
-   border:1px solid #454;;
-   border-radius:5px;
-   background:#252;
-   font-size: 15px;
-   color: #0E0;
-   &:hover{
-      border:1px solid white;
-      box-shadow:0px 0px 15px white;
-   }
-}
-
-.removeBtn {
-    margin-left:auto;
-    border:1px solid #544;;
-    border-radius:5px;
-    background:#522;
-    font-size: 15px;
-    color: red;
-    &:hover{
-       border:1px solid white;
-       box-shadow:0px 0px 15px white;
     }
 }
 
- 
-.addBtn {
-    position:relative;
-    float:left;
-    left: 15px;
-    border:2px solid #111;;
-    border-radius:5px;
-    background:#252;
-    font-size: 15px;
-    color: #0E0;
-    &:hover{
-       border:1px solid white;
-       box-shadow:0px 0px 15px white;
-    }
-}
+
 
 .editColors {
    padding:2px;
@@ -126,48 +102,5 @@
 
 }
   
-.saveBar {
-   text-align:left;
-
-   .save { position:relative; float:right;}
-  .resetBarBtn {
-      background: #333;
-      color:#fff;
-      border: 2px solid #aaa;
-      box-shadow:0px 0px 2px white ;
-      &:hover{
-        box-shadow:0px 0px 10px #00a;
-      }
-      
-  }
-
-  .cancelBarBtn {
-      background: #333;
-      color:#fff;
-      border: 2px solid #700;
-      box-shadow:0px 0px 25px white ;
-      &:hover{
-        box-shadow:0px 0px 30px red;
-      }
-      
-  }
-  
-  .saveBarBtn {
-      background: #333;
-      color:#fff;
-      border: 2px solid #070;
-      box-shadow:0px 0px 25px white ;
-      &:hover{
-        box-shadow:0px 0px 30px green;
-      }
-      
-  }
-}
-
-.colorTable {
-  margin-top:5px;
-  tr { text-align:center}
-
-}
 a {color: #ccc;}
-
+h4 {margin:2px; margin-left:0px};

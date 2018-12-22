@@ -5,18 +5,21 @@ const basetime = moment().add(-1, "day");
 const basetimeStr = basetime.format("YYYYMMDD") + "00";
 
 export const regions =[ 
-      {id: 123, name : "Global" ,       coordinates: [[-180, 90], [180, -90]]},
-      {id: 124, name : "South America", coordinates: [[-100, 20], [-20, -50]]},
-      {id: 125, name : "North America", coordinates: [[-165, 70], [-55, 15]]},
-      {id: 126, name : "Byzantium",     coordinates: [[-20, 65],  [80, -5]]},
-      {id: 127, name : 'Sbtropatl',     coordinates: [[-100, 60], [30, -5]]},
-      {id: 128, name : 'Niosea',        coordinates: [[40,36],   [131,-15]]},
-      {id: 129, name : 'Eastasia',      coordinates: [[70,76],    [171,15]]},
-      {id: 130, name : 'Pacific',       coordinates: [[95,76],    [265,15]]},
-      {id: 131, name : 'Conus' ,        coordinates: [[-150,66],   [-49,0]]},
-      {id: 132, name : 'Satlantic' ,    coordinates: [[-90,11],  [61,-60]]},
-      {id: 133, name : 'Sioaus' ,       coordinates: [[0, 11],[180, -60]]},
-      {id: 134, name : 'npolar' ,       coordinates: [[-180,90],[180, 45]]}
+      {id: 100, name : "Africa",        coordinates: [[-30, 45],  [70, -50]]},
+      {id: 102, name : 'Asia',          coordinates: [[10, 80],   [160, 0]]},
+      {id: 103, name : 'East Pacific',  coordinates: [[-80,70],   [160,-10]]},
+      {id: 104, name : "Global",        coordinates: [[-180, 90], [180, -90]]},
+      {id: 105, name : 'Indian Ocean' , coordinates: [[30,40],  [120,-50]]},
+      {id: 107, name : "North America", coordinates: [[-145, 70], [-45, 10]]},
+      {id: 108, name : "North Atlantic", coordinates: [[-100, 70], [20, 0]]},
+      {id: 109, name : "North Pacific", coordinates:  [[-110, 70], [90, -20]]},
+      {id: 110, name : "South Pacific", coordinates: [[-110, 20], [90, -80]]},
+      {id: 111, name : 'South Atlantic', coordinates: [[-90,20], [60,-80]]},
+      {id: 112, name : 'Southeast\n Asia',  coordinates: [[80,40], [170,-20]]},
+      {id: 113, name : 'Southwest\n Asia' , coordinates: [[20, 50],  [100,0]]},
+      {id: 114, name : 'WestPac' ,       coordinates: [[70, 50],[180, -20]]},
+      {id: 115, name : 'North Polar' ,  coordinates: [[-180,90],[180, 40]]},
+      {id: 116, name : 'South Polar' ,  coordinates: [[-180,-40],[180, -90]]}
 ]
 
 

@@ -8,11 +8,11 @@ body{
   justify-content: space-between;
   height:100vh;
   overflow:hidden;
+  font-size:0.8em;
 }
 
 .leftContent{
     display: flex;
-    min-width:320px;
     max-width:320px;
     background: #222;
     flex-direction:column;
@@ -22,6 +22,7 @@ body{
   display:flex;
   flex-direction:column;
   flex-grow: 2;
+  width:10px;
 }
 
 
@@ -30,9 +31,13 @@ body{
 }
 
 #map{
+  border:1px solid #eee;
 }
 
 #regions {
+  margin:3px;
+  border:1px solid #aaa;
+  width:100%;
   padding:1px;
 }
 

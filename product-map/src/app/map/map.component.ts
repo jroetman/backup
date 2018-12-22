@@ -77,7 +77,7 @@ export class MapComponent implements OnInit {
 
        this.products = state.products
        this.extent = [...state.extent]
-       if(this.extent) this.extentdisplay = state.extent.map(e => e.toFixed(2))
+       if(this.extent) this.extentdisplay = state.extent.map(e => e.toFixed(0))
 
     })
 

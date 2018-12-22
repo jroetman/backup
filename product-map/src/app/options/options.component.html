@@ -12,7 +12,7 @@
         
         <div [class.hideLayers]="showLayers || !(productSelection.name == map.name) ">
             <div> 
-                <div *ngFor="let l of map.layers">
+                <div *ngFor="let l of map.layers; trackBy:trackFn">
                     <app-layer [parent_guid]="map.name" [layer]="l"> </app-layer>
                 </div>
             </div>

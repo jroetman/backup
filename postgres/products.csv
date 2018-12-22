@@ -7,3 +7,4 @@ id|name|alias|fieldtype|isDaily|path|foot|timeFormat|timeRegex
 6|NGAC|NGAC|aod|False|/DATA/cylc/products/NGAC/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_aod_550_ngac.nc$
 7|NGACF|NGACF|aod|False|/DATA/cylc/products/NGACF/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_aod_550_ngacf.nc$
 8|COAMPS|COAMPS|coamps|True|/DATA/cylc/products/COAMPS/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d%H|(\d+)_XXXXXXX_fcstfld.nc$
+9|FAROP_05|FAROP|aod|False|/DATA/cylc/products/FAROP_05/dtg/|NOT OFFICIAL FNMOC NAAPS RUN|%Y%m%d_%H%M|.*?_(\d+_\d+)_.*

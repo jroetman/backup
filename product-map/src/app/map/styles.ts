@@ -12,7 +12,7 @@ export default class Styles {
                 color: 'rgba(0,100, 200, 0.2)'
             }),
             text: new Text({
-                font: '12px Calibri,sans-serif',
+                font: '11px Calibri,sans-serif',
                 fill: new Fill({
                     color: '#000'
                 }),

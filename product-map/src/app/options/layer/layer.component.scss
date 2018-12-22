@@ -63,9 +63,11 @@
      }
 }
 .optionContainer {
+
   background: #555;
   margin:3px;
   margin-top:0px;
+
  }
 .hideLayers {
      visibility:hidden;
@@ -86,7 +88,14 @@
 }
 
 .extra{
- div { background:#333;margin:5px;}
+ div {
+   background:#333;
+   margin:3px;
+  }
+
+  .optGroup {
+     input {vertical-align:middle;margin:0px;padding:0px;}
+  }
 }
 
 

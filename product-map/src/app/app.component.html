@@ -1,7 +1,8 @@
 <div style="text-align:center">
   <!-- p *ngIf="showInstructions" class="instruction" > Drag or Double Click Fields Below to Create New Maps </p -->
   <div class="main">
-    <div class="leftContent" *ngIf="selectedProducts.length > 0">
+    <!--div class="leftContent" *ngIf="selectedProducts.length > 0" -->
+    <div class="leftContent">
       <app-map id="map"> </app-map>
       <app-region id="regions"  >  </app-region>
       <app-product id="products"> </app-product>
@@ -12,6 +13,5 @@
        <app-gallery id="gallery"> </app-gallery>
     </div>
   </div>
-
 
 </div>

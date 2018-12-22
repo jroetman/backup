@@ -4,35 +4,40 @@
 
      </div>
      <div id="options" *ngIf="showOptions">
-          <label> Maps </label>
-          <div *ngIf="showOptions" class="toggleBtn" (click)="showOptions = !showOptions">
-              <span>&#x25C1;</span>
-          </div>
-          <div  *ngFor="let sp of selectedProducts; let i = index; trackBy: trackByFn" >
-                 <app-options [idx]="i + 1" [map]="sp"> </app-options>
-          </div>
+          <label> 
+            <div *ngIf="showOptions" class="btn toggleBtn" (click)="showOptions = !showOptions">&#x25C1;</div>
+            <div class="mapsl">Maps</div>
+          </label>
+
+          <div class="optContainer">
+              <div  *ngFor="let sp of selectedProducts; let i = index; trackBy: trackByFn" >
+                     <app-options [idx]="i + 1" [map]="sp"> </app-options>
+              </div>
     
-          <div class="dropZone" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addProduct($event)" [class.over]='over'>
-             <button class="btn" (click)="createMap()">+</button>
+              <div class="dropZone" (leave)="out()" (dragleave)="out($event)" (dragover)="dragover($event)" (drop)="addProduct($event)" [class.over]='over'>
+                 <button class="btn" (click)="createMap()">+</button>
+              </div>
           </div>
 
      </div>
      <div class="images">
         <!--div [ngClass]="{'halfWidth' : products.length > 1}" *ngFor="let p of products"-->
         <div class="galleryOptions">
-           <label> IMAGES PER ROW: </label>
+           <label> LAYOUT: </label>
            <table [class.active]="imgPerRow==1" (click)="imgPerRow=1" class="rowChoice r1"><tr><td></td></tr></table>
            <table [class.active]="imgPerRow==2" (click)="imgPerRow=2" class="rowChoice r2"><tr><td></td><td></td></tr></table>
            <table [class.active]="imgPerRow==3" (click)="imgPerRow=3" class="rowChoice r3"><tr><td></td><td></td><td></td></tr></table>
         </div>
 
         <h3 *ngIf="selectedProducts && selectedProducts.length == 0"> No Products Selected</h3>
-        <div [ngStyle]="{'width' : getWidth()}" class="imgcontainer" *ngFor="let p of selectedProducts; let i = index; trackBy: trackByFn"> 
-            <div class="head"> 
-              <div><b>{{p.name}}</b> <!-- {{p.name + " " + p.field.alias + " " + p.options.level}} --> </div>
-              <div class="remove" (click)="removeProduct(p)"> X </div>
+        <div class="imgcontainer" [ngClass]="'r' + imgPerRow">
+            <div class="mapImg" *ngFor="let p of selectedProducts; let i = index; trackBy: trackByFn"> 
+                <div (click)="selectProducts(p)" class="head" [class.mapSelected]="productSelection && productSelection.name == p.name"> 
+                  <div  ><b>{{p.name}}</b> <!-- {{p.name + " " + p.field.alias + " " + p.options.level}} --> </div>
+                  <div class="remove" (click)="removeProduct(p)"> X </div>
+                </div>
+                <app-image class="img" [numImages]="selectedProducts.length" [tau]="currentTau" [dtg]="currentDtg" [product]="p" [extent]="extent"> </app-image>
             </div>
-            <app-image [numImages]="selectedProducts.length" [tau]="currentTau" [dtg]="currentDtg" [product]="p" [extent]="extent"> </app-image>
         </div>
      </div>
 </div>

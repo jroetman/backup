@@ -1,5 +1,5 @@
 import {BrowserModule} from  '@angular/platform-browser'
-import { NgModule } from '@angular/core';
+import { NgModule, ChangeDetectorRef } from '@angular/core';
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { ProductComponent } from './product/product.component';
@@ -27,6 +27,7 @@ import { ImageComponent } from './gallery/image/image.component';
 
 import { ColorPickerModule } from 'ngx-color-picker';
 import { LayerComponent } from './options/layer/layer.component';
+import { ColorbarEditorComponent } from './colorbar/colorbar-editor/colorbar-editor.component';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { LayerComponent } from './options/layer/layer.component';
     OptionsComponent,
     ProductsComponent,
     ImageComponent,
-    LayerComponent
+    LayerComponent,
+    ColorbarEditorComponent
   ],
   imports: [
     ColorPickerModule,
@@ -56,7 +58,7 @@ import { LayerComponent } from './options/layer/layer.component';
     HttpClientModule,
     ReactiveFormsModule
   ],
-  providers: [DataService, ColorbarService, PrintService, ProductService],
+  providers: [DataService, ColorbarService, PrintService, ProductService, ChangeDetectorRef],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

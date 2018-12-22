@@ -1,6 +1,9 @@
 #mapContainer {
   background: #013;
+  width:250px;
+  border:1px solid #aaa;
 }
+
 #vectorProduct {
   position: absolute;
   display: flex;

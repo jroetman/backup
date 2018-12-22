@@ -54,13 +54,18 @@ export class GalleryComponent implements OnInit {
 
   }
 
+  selectProducts(p){
+     this.data.changeMessage({productSelection : p})
+     
+  }
+
   getWidth() {
      return (98 / this.imgPerRow) + '%';
   }
 
   trackByFn(index, prod){
      let hash = prod ?  prod.name + JSON.stringify(prod.layers) : undefined;
-     return 1;
+     return index;
   }
 
   removeProduct(p){
@@ -74,8 +79,8 @@ export class GalleryComponent implements OnInit {
          const region = this.selectedRegion
          this.colors = state.colors;
          this.showInstructions = state.showInstructions;
+         this.productSelection = state.productSelection;
  
-
          if(state.selectedProducts.length == 0) {
              this.selectedProducts = []; //JSON.parse(JSON.stringify(state.selectedProducts))
              

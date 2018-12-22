@@ -72,6 +72,10 @@ li {
        }
       .spacer {margin-top:5px;width:20px;}
       cursor:pointer;
+
+      &:hover{
+        box-shadow: 0px 0px 3px 1px white;
+      }
    }
 
    li {
